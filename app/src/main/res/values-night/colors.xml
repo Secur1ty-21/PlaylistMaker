@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Activity main elements-->
+    <color name="main_background">#FF2C2D2F</color>
+    <!--Activity settings elements-->
+    <color name="settings_icon_color">#AEAFB4</color>
+    <color name="settings_background">#FF2C2D2F</color>
+    <!--Common elements-->
+    <color name="text_big_color">#FFE0E0E0</color>
+    <color name="text_medium_color">#FFFFFFFF</color>
+    <color name="switch_track_color">#E6E8EB</color>
+</resources>
