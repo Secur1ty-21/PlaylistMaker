@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Activity main-->
+    <dimen name="main_button_radius">16dp</dimen>
+    <dimen name="main_button_icon_padding">10dp</dimen>
+    <dimen name="main_margin_between_button">16dp</dimen>
+    <!--Activity settings-->
+    <dimen name="settings_button_height">61dp</dimen>
+    <!--Common elements-->
+    <dimen name="content_padding_top">14dp</dimen>
+    <dimen name="content_padding_horizontal">16dp</dimen>
+    <dimen name="text_head_size">22sp</dimen>
+    <dimen name="text_normal_size">16sp</dimen>
+    <dimen name="margin_from_toolbar">40dp</dimen>
+</resources>
