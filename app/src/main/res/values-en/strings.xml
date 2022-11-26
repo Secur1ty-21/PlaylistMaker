@@ -8,6 +8,10 @@
     <string name="settings_button_share">Share the app</string>
     <string name="settings_button_support">Write to support</string>
     <string name="settings_button_agreement">User agreement</string>
+    <string name="search_edittext_search_hint">Search</string>
+    <string name="support_email_subject">Message to the developers of the Playlist Maker app</string>
+    <string name="support_email_text">Thanks to the developers for the cool app!</string>
     <!--Support assistant-->
-    <string name="settings_button_back_description">Back</string>
+    <string name="button_back_description">Back</string>
+    <string name="button_clear_description">Clear</string>
 </resources>

@@ -7,13 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <!--Activity main elements-->
-    <color name="main_background">#3772E7</color>
-    <!--Activity settings elements-->
-    <color name="settings_icon_color">#AEAFB4</color>
-    <color name="settings_background">#FFFFFFFF</color>
-    <!--Common elements-->
-    <color name="text_big_color">#1A1B22</color>
-    <color name="text_medium_color">#FF000000</color>
-    <color name="switch_track_color">#E6E8EB</color>
+    <!-- Palette -->
+    <color name="yp_black">#1A1B22</color>
+    <color name="yp_white">#FFFFFFFF</color>
+    <color name="yp_text_gray">#AEAFB4</color>
+    <color name="yp_light_gray">#E6E8EB</color>
+    <color name="yp_background">#801A1B22</color>
+    <color name="yp_blue">#3772E7</color>
+    <color name="yp_red">#F56B6C</color>
 </resources>
