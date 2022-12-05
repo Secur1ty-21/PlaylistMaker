@@ -1,17 +1,14 @@
 package ru.yamost.playlistmaker
 
 import android.content.Context
-import android.hardware.input.InputManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
-import androidx.core.content.getSystemService
 import com.google.android.material.appbar.MaterialToolbar
 
 class SearchActivity : AppCompatActivity() {
@@ -53,6 +50,7 @@ class SearchActivity : AppCompatActivity() {
         val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         clearButton.setOnClickListener {
             searchEditText.setText("")
+            searchInputText = ""
             inputManager?.hideSoftInputFromWindow(searchEditText.windowToken, 0)
         }
     }

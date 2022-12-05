@@ -45,7 +45,7 @@
                 android:maxLines="1"
                 android:minHeight="36dp"
                 android:paddingStart="12dp"
-                android:paddingEnd="12dp"
+                android:paddingEnd="40dp"
                 android:textColor="@color/yp_black"
                 android:textColorHint="?attr/colorOnSurface"
                 android:textFontWeight="400"
