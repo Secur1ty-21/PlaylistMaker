@@ -1,91 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/settings_background"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/content_padding_top">
+    android:background="?attr/colorSecondary"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/content_padding_horizontal"
-        android:orientation="horizontal">
+        app:elevation="0dp">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:background="@color/settings_background"
-            android:contentDescription="@string/settings_button_back_description"
-            android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_arrow_back"
-            app:tint="@color/text_big_color" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:gravity="top"
-            android:text="@string/main_button_settings"
-            android:textColor="@color/text_big_color"
-            android:textSize="@dimen/text_head_size" />
-    </LinearLayout>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            style="@style/AppBar"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="@string/main_button_settings" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_button_height"
+        style="@style/SettingActivityButton"
         android:layout_marginTop="@dimen/margin_from_toolbar"
         android:paddingHorizontal="@dimen/content_padding_horizontal"
         android:text="@string/settings_button_theme"
-        android:textColor="@color/text_medium_color"
-        android:textSize="@dimen/text_normal_size"
-        app:thumbTint="@color/settings_icon_color"
-        app:trackTint="@color/switch_track_color" />
+        tools:checked="true" />
 
     <Button
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_button_height"
-        android:backgroundTint="@color/settings_background"
+        android:id="@+id/button_sharing"
+        style="@style/SettingActivityButton"
         android:text="@string/settings_button_share"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
-        android:textColor="@color/text_medium_color"
-        android:textSize="@dimen/text_normal_size"
-        android:typeface="sans"
-        app:icon="@drawable/ic_share"
-        app:iconGravity="end"
-        app:iconTint="@color/settings_icon_color" />
+        app:icon="@drawable/ic_share" />
 
     <Button
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_button_height"
-        android:backgroundTint="@color/settings_background"
+        android:id="@+id/button_support"
+        style="@style/SettingActivityButton"
         android:text="@string/settings_button_support"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
-        android:textColor="@color/text_medium_color"
-        android:textSize="@dimen/text_normal_size"
-        android:typeface="sans"
-        app:icon="@drawable/ic_support"
-        app:iconGravity="end"
-        app:iconTint="@color/settings_icon_color" />
+        app:icon="@drawable/ic_support" />
 
     <Button
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_button_height"
-        android:backgroundTint="@color/settings_background"
+        android:id="@+id/button_agreement"
+        style="@style/SettingActivityButton"
         android:text="@string/settings_button_agreement"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
-        android:textColor="@color/text_medium_color"
-        android:textSize="@dimen/text_normal_size"
-        android:typeface="sans"
-        app:icon="@drawable/ic_arrow_forward"
-        app:iconGravity="end"
-        app:iconTint="@color/settings_icon_color" />
+        app:icon="@drawable/ic_arrow_forward" />
 </LinearLayout>
