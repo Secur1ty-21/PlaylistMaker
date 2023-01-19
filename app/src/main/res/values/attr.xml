@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="mainScreenBackgroundColor" format="reference"/>
+    <attr name="colorOnMainButton" format="reference"/>
+    <attr name="backgroundMainButton" format="reference"/>
+    <attr name="toolbarTextColorMain" format="reference"/>
+    <attr name="primaryTextColor" format="reference"/>
+    <attr name="screenBackgroundColor" format="reference"/>
+    <attr name="primaryIconTint" format="reference"/>
+    <attr name="primaryHintColor" format="reference"/>
+    <attr name="searchEditTextBackgroundColor" format="reference"/>
+    <attr name="searchEditTextIconTint" format="reference"/>
+</resources>

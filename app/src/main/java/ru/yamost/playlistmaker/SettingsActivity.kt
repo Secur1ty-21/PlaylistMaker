@@ -19,7 +19,7 @@ class SettingsActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.url_share))
-            startActivity(intent)
+            startImplicitIntent(intent)
         }
         buttonSupport.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
@@ -27,15 +27,28 @@ class SettingsActivity : AppCompatActivity() {
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.support_email)))
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_email_subject))
             intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.support_email_text))
-            startActivity(intent)
+            startImplicitIntent(intent)
         }
         buttonAgreement.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(getString(R.string.url_agreement))
-            startActivity(intent)
+            startImplicitIntent(intent)
         }
         topAppBar.setNavigationOnClickListener {
             finish()
         }
+    }
+
+    private fun startImplicitIntent(intent: Intent) {
+        if (isIntentSafe(intent)) {
+            startActivity(intent)
+        } else {
+
+        }
+    }
+
+    private fun isIntentSafe(intent: Intent): Boolean {
+        val activities = packageManager.queryIntentActivities(intent, 0)
+        return activities.size > 0
     }
 }
