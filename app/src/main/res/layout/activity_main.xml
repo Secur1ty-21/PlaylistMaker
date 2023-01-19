@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary"
+    android:background="?attr/mainScreenBackgroundColor"
     android:orientation="vertical"
     android:paddingBottom="22dp"
     tools:context=".MainActivity">
@@ -17,9 +17,9 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
             style="@style/AppBar"
-            android:background="?attr/colorPrimary"
+            android:background="?attr/mainScreenBackgroundColor"
             app:title="@string/app_name"
-            app:titleTextColor="?attr/colorPrimaryVariant" />
+            app:titleTextColor="?attr/toolbarTextColorMain" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <Button
