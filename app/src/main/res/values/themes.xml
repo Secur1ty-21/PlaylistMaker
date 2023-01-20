@@ -28,5 +28,6 @@
         <item name="primaryHintColor">@color/yp_text_gray</item>
         <item name="searchEditTextBackgroundColor">@color/yp_light_gray</item>
         <item name="searchEditTextIconTint">@color/yp_text_gray</item>
+        <item name="subtitleTrackTextColor">@color/yp_text_gray</item>
     </style>
 </resources>

@@ -14,4 +14,6 @@
     <!--Support assistant-->
     <string name="button_back_description">Back</string>
     <string name="button_clear_description">Clear</string>
+    <string name="image_cover_track_description">Track cover</string>
+    <string name="ic_forward">Forward arrow</string>
 </resources>
