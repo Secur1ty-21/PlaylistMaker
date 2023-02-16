@@ -17,7 +17,10 @@
     <string name="support_email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="support_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="support_email" translatable="false">cdarius21@yandex.ru</string>
+    <string name="subtitle_of_track" translatable="false">%s · %s</string>
     <!--Support assistant-->
     <string name="button_back_description">Назад</string>
     <string name="button_clear_description">Очистить</string>
+    <string name="image_cover_track_description">Обложка трэка</string>
+    <string name="ic_forward">Стрелка вперед</string>
 </resources>
