@@ -23,8 +23,10 @@
         <item name="backgroundMainButton">@color/yp_white</item>
         <item name="toolbarTextColorMain">@color/yp_white</item>
         <item name="primaryTextColor">@color/yp_white</item>
+        <item name="primaryTextColorOnButton">@color/yp_black</item>
         <item name="screenBackgroundColor">@color/yp_black</item>
         <item name="primaryIconTint">@color/yp_white</item>
+        <item name="secondaryIconTint">@color/yp_white</item>
         <item name="primaryHintColor">@color/yp_black</item>
         <item name="searchEditTextBackgroundColor">@color/yp_white</item>
         <item name="searchEditTextIconTint">@color/yp_black</item>

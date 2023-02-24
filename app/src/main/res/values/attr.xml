@@ -7,6 +7,8 @@
     <attr name="primaryTextColor" format="reference"/>
     <attr name="screenBackgroundColor" format="reference"/>
     <attr name="primaryIconTint" format="reference"/>
+    <attr name="primaryTextColorOnButton" format="reference"/>
+    <attr name="secondaryIconTint" format="reference"/>
     <attr name="primaryHintColor" format="reference"/>
     <attr name="searchEditTextBackgroundColor" format="reference"/>
     <attr name="searchEditTextIconTint" format="reference"/>
