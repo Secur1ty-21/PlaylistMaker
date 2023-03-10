@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.adapter
+package ru.yamost.playlistmaker.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
