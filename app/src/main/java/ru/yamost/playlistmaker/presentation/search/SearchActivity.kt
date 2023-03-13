@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.presentation
+package ru.yamost.playlistmaker.presentation.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import retrofit2.Call
 import ru.yamost.playlistmaker.R
+import ru.yamost.playlistmaker.data.cache.SearchHistory
 import ru.yamost.playlistmaker.data.cache.TracksDataStore
 import ru.yamost.playlistmaker.data.model.Track
 import ru.yamost.playlistmaker.data.network.ResponseTrackList
@@ -27,12 +28,13 @@ import ru.yamost.playlistmaker.presentation.adapter.TrackListAdapter
 class SearchActivity : AppCompatActivity() {
 
     companion object {
-        const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
+        private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
+        private const val SEARCH_HISTORY_FILE_NAME = "Search history"
     }
 
     private var searchInputText = ""
-    private val tracksList = mutableListOf<Track>()
-    private val trackListAdapter = TrackListAdapter(tracksList)
+    private val trackList = mutableListOf<Track>()
+    private val trackListAdapter = TrackListAdapter(trackList)
     private lateinit var tracksRecycler: RecyclerView
     private lateinit var errorBlock: LinearLayout
     private lateinit var errorMessage: TextView
@@ -42,13 +44,20 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var clearButton: ImageButton
     private lateinit var topAppBar: MaterialToolbar
+    private lateinit var hintSearchHistory: TextView
+    private lateinit var clearHistoryButton: Button
     private var requestGetTracksBySearchQuery: Call<ResponseTrackList>? = null
+    private lateinit var searchHistory: SearchHistory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         initViews()
         setListeners()
+        searchHistory = SearchHistory(
+            getSharedPreferences(SEARCH_HISTORY_FILE_NAME, MODE_PRIVATE)
+        )
+        trackListAdapter.itemClickListener = { track -> searchHistory.addTrack(track) }
     }
 
     private fun initViews() {
@@ -60,6 +69,8 @@ class SearchActivity : AppCompatActivity() {
         errorMessage = findViewById(R.id.message_error)
         errorIcon = findViewById(R.id.icon_error)
         progressBar = findViewById(R.id.progress_bar)
+        hintSearchHistory = findViewById(R.id.searchHistoryHint)
+        clearHistoryButton = findViewById(R.id.clearHistoryButton)
 
         tracksRecycler = findViewById(R.id.track_list)
         tracksRecycler.adapter = trackListAdapter
@@ -78,25 +89,36 @@ class SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (s.isNullOrEmpty()) {
                     clearButton.isVisible = false
+                    searchInputText = ""
+                    if (searchEditText.hasFocus()) {
+                        showSearchHistory()
+                    } else {
+                        hideSearchHistory()
+                    }
                 } else {
+                    hideSearchHistory()
                     searchInputText = s.toString()
                     clearButton.isVisible = true
                 }
             }
         }
         searchEditText.addTextChangedListener(textListener)
+        searchEditText.setOnFocusChangeListener { _, _ -> showSearchHistory() }
         topAppBar.setNavigationOnClickListener { finish() }
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             onSearchEditorAction(actionId, searchEditText)
         }
         clearButton.setOnClickListener { onClickClearButton() }
         refreshButton.setOnClickListener { updateTrackListBySearchQuery(searchInputText) }
+        clearHistoryButton.setOnClickListener { onClickClearHistoryButton() }
     }
 
     private fun onSearchEditorAction(actionId: Int, view: View): Boolean {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             closeKeyboard(view)
-            updateTrackListBySearchQuery(searchInputText)
+            if (searchInputText.isNotEmpty()) {
+                updateTrackListBySearchQuery(searchInputText)
+            }
             return true
         }
         return false
@@ -110,13 +132,14 @@ class SearchActivity : AppCompatActivity() {
     private fun onClickClearButton() {
         searchEditText.setText("")
         searchInputText = ""
-        tracksList.clear()
+        trackList.clear()
         trackListAdapter.notifyDataSetChanged()
+        showSearchHistory()
         closeKeyboard(searchEditText)
     }
 
     private fun updateTrackListBySearchQuery(searchQuery: String) {
-        tracksList.clear()
+        trackList.clear()
         trackListAdapter.notifyDataSetChanged()
         progressBar.isVisible = true
         requestGetTracksBySearchQuery =
@@ -146,7 +169,7 @@ class SearchActivity : AppCompatActivity() {
         when (searchStatus) {
             SearchStatus.SUCCESS -> {
                 errorBlock.isVisible = false
-                tracksList.addAll(data)
+                trackList.addAll(data)
                 trackListAdapter.notifyDataSetChanged()
             }
             SearchStatus.EMPTY_RESULT -> {
@@ -165,6 +188,34 @@ class SearchActivity : AppCompatActivity() {
         errorMessage.text = getString(textId)
     }
 
+    private fun onClickClearHistoryButton() {
+        searchHistory.clearHistory()
+        hideSearchHistory()
+    }
+
+    private fun hideSearchHistory() {
+        trackList.clear()
+        trackListAdapter.notifyDataSetChanged()
+        hintSearchHistory.isVisible = false
+        clearHistoryButton.isVisible = false
+    }
+
+    private fun showSearchHistory() {
+        if (isTimeToShowSearchHistory()) {
+            errorBlock.isVisible = false
+            trackList.clear()
+            trackList.addAll(searchHistory.getSearchHistory())
+            trackListAdapter.notifyDataSetChanged()
+            hintSearchHistory.isVisible = true
+            clearHistoryButton.isVisible = true
+        }
+    }
+
+    private fun isTimeToShowSearchHistory(): Boolean {
+        return searchEditText.hasFocus() && searchInputText.isEmpty()
+                && searchHistory.isNotEmpty()
+    }
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         findViewById<EditText>(R.id.search_text).setText(
@@ -174,6 +225,8 @@ class SearchActivity : AppCompatActivity() {
         )
         if (searchInputText.isNotEmpty()) {
             updateTrackListBySearchQuery(searchInputText)
+        } else if (!errorBlock.isVisible) {
+            showSearchHistory()
         }
     }
 

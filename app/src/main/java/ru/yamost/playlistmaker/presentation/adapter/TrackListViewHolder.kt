@@ -23,7 +23,6 @@ class TrackListViewHolder(parentView: ViewGroup, private val dateFormat: SimpleD
     private val trackTime: TextView = itemView.findViewById(R.id.track_time)
 
     fun bind(track: Track) {
-        itemView.setOnClickListener { }
         Glide.with(itemView)
             .load(track.artworkUrl)
             .placeholder(R.drawable.ic_track_placeholder)

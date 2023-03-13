@@ -22,6 +22,8 @@
     <string name="search_no_connection">Проблемы со связью\n\n
         Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="search_update_button">Обновить</string>
+    <string name="search_history_hint">Вы искали</string>
+    <string name="search_history_clear_button">Очистить историю</string>
     <!--Support assistant-->
     <string name="button_back_description">Назад</string>
     <string name="button_clear_description">Очистить</string>
