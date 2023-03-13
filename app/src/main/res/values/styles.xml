@@ -29,6 +29,12 @@
         <item name="iconTint">?attr/primaryIconTint</item>
     </style>
 
+    <style name="SmallButtonTextAppearance" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textSize">@dimen/text_small_size</item>
+    </style>
+
     <style name="MediumTextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>

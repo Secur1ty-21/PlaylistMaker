@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 @Keep
 data class Track(
+    @SerializedName("trackId") val id: Int,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: String,
