@@ -20,6 +20,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchTheme"
         style="@style/SettingActivityButton"
         android:layout_marginTop="@dimen/margin_from_toolbar"
         android:paddingHorizontal="@dimen/content_padding_horizontal"
