@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.yamost.playlistmaker.data.model.Track
 
-class SearchHistory(private val sharedPreferences: SharedPreferences) {
+class SearchHistoryStorage(private val sharedPreferences: SharedPreferences) {
     companion object {
         private const val SEARCH_HISTORY_KEY = "searchHistory"
         private const val MAX_TRACKS_IN_SEARCH_HISTORY = 10

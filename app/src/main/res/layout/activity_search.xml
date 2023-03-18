@@ -51,7 +51,7 @@
                 android:textColor="@color/yp_black"
                 android:textColorHint="?attr/primaryHintColor"
                 android:textFontWeight="400"
-                android:textSize="@dimen/text_regular_size"
+                android:textSize="@dimen/text_L"
                 app:icon="@drawable/ic_search" />
 
             <ImageButton

@@ -32,19 +32,26 @@
     <style name="SmallButtonTextAppearance" parent="Widget.MaterialComponents.TextView">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
-        <item name="android:textSize">@dimen/text_small_size</item>
+        <item name="android:textSize">@dimen/text_M</item>
     </style>
 
     <style name="MediumTextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
-        <item name="android:textSize">@dimen/text_medium_size</item>
+        <item name="android:textSize">@dimen/text_XL</item>
     </style>
 
     <style name="SmallText" parent="Widget.MaterialComponents.TextView">
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
-        <item name="android:textSize">@dimen/text_regular_size</item>
+        <item name="android:textSize">@dimen/text_L</item>
+    </style>
+
+    <style name="CaptionXS400" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/text_S</item>
+        <item name="android:textColor">@color/yp_text_gray</item>
     </style>
 
     <style name="Widget.App.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">

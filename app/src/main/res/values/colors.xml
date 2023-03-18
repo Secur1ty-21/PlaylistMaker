@@ -10,7 +10,9 @@
     <!-- Palette -->
     <color name="text_medium_color">#FF000000</color>
     <color name="yp_black">#1A1B22</color>
+    <color name="yp_black_25alpha">#401A1B22</color>
     <color name="yp_white">#FFFFFFFF</color>
+    <color name="yp_white_25alpha">#40FFFFFF</color>
     <color name="yp_text_gray">#AEAFB4</color>
     <color name="yp_light_gray">#E6E8EB</color>
     <color name="yp_background">#801A1B22</color>
