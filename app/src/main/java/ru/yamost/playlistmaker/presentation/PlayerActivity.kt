@@ -58,7 +58,7 @@ class PlayerActivity : AppCompatActivity() {
             Glide.with(cover)
                 .load(it.artworkUrl?.replaceAfterLast('/', "512x512bb.jpg"))
                 .centerCrop()
-                .transform(RoundedCorners(8))
+                .transform(RoundedCorners(cover.resources.getDimensionPixelSize(R.dimen.cornerRadiusS)))
                 .placeholder(R.drawable.ic_track_placeholder)
                 .into(cover)
             trackName.text = it.trackName

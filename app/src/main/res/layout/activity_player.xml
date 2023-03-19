@@ -30,20 +30,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="24dp" />
+            app:layout_constraintGuide_begin="@dimen/contentPaddingM" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/marginEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="24dp" />
+            app:layout_constraintGuide_end="@dimen/contentPaddingM" />
 
         <ImageView
             android:id="@+id/cover"
-            android:layout_width="312dp"
-            android:layout_height="312dp"
-            android:layout_marginHorizontal="24dp"
+            android:layout_width="@dimen/playerCoverSize"
+            android:layout_height="@dimen/playerCoverSize"
             android:layout_marginTop="26dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="@id/marginEnd"
@@ -140,14 +139,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="16dp" />
+            app:layout_constraintGuide_begin="@dimen/contentPaddingS" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/infoMarginEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="16dp" />
+            app:layout_constraintGuide_end="@dimen/contentPaddingS" />
 
 
         <TextView

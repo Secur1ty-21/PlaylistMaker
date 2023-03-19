@@ -23,7 +23,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/content_padding_horizontal"
+        android:layout_marginHorizontal="@dimen/contentPaddingS"
         android:layout_marginTop="8dp"
         app:cardCornerRadius="8dp">
 

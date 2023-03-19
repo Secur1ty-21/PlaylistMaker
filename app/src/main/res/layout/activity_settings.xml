@@ -23,7 +23,7 @@
         android:id="@+id/switchTheme"
         style="@style/SettingActivityButton"
         android:layout_marginTop="@dimen/margin_from_toolbar"
-        android:paddingHorizontal="@dimen/content_padding_horizontal"
+        android:paddingHorizontal="@dimen/contentPaddingS"
         android:text="@string/settings_button_theme"
         tools:checked="true" />
 
