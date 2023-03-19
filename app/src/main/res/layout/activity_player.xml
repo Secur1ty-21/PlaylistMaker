@@ -181,7 +181,8 @@
             android:text="@string/player_year"
             app:layout_constraintStart_toStartOf="@id/infoMarginStart"
             app:layout_constraintTag="yearTag"
-            app:layout_constraintTop_toBottomOf="@id/captionAlbum" />
+            app:layout_constraintTop_toBottomOf="@id/album"
+            app:layout_goneMarginTop="17dp" />
 
         <TextView
             android:id="@+id/captionGenre"
@@ -234,7 +235,7 @@
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@id/captionBarrier"
             app:layout_constraintTop_toTopOf="@id/captionAlbum"
-            tools:text="Yesterday (Remastered 2009)" />
+            tools:text="Yesterday (Remastered 2009) Yesterday (Remastered 2009) Yesterday (Remastered 2009)" />
 
         <TextView
             android:id="@+id/year"

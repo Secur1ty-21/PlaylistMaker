@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
@@ -19,6 +20,7 @@ class PlayerActivity : AppCompatActivity() {
     private var track: Track? = null
     private lateinit var cover: ImageView
     private lateinit var collectionName: TextView
+    private lateinit var captionAlbum: TextView
     private lateinit var trackName: TextView
     private lateinit var artistName: TextView
     private lateinit var duration: TextView
@@ -48,6 +50,7 @@ class PlayerActivity : AppCompatActivity() {
         genre = findViewById(R.id.genre)
         country = findViewById(R.id.country)
         topAppBar = findViewById(R.id.topAppBar)
+        captionAlbum = findViewById(R.id.captionAlbum)
     }
 
     private fun setDataToViews() {
@@ -59,7 +62,12 @@ class PlayerActivity : AppCompatActivity() {
                 .placeholder(R.drawable.ic_track_placeholder)
                 .into(cover)
             trackName.text = it.trackName
-            collectionName.text = it.collectionName
+            if (it.collectionName.isNullOrEmpty()) {
+                collectionName.isVisible = false
+                captionAlbum.isVisible = false
+            } else {
+                collectionName.text = it.collectionName
+            }
             artistName.text = it.artistName
             duration.text = dateFormat.format(it.trackTimeMillis.toLong())
             year.text = it.releaseDate?.substringBefore('-')
