@@ -83,41 +83,46 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addToPlaylistButton"
+            style="@style/PlayerFabStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="54dp"
             android:backgroundTint="?attr/playerBackgroundIconTint"
             android:contentDescription="@string/player_add_to_playlist"
-            android:foreground="@drawable/ic_add"
-            android:foregroundGravity="center"
-            app:elevation="0dp"
             app:layout_constraintStart_toStartOf="@id/artistName"
-            app:layout_constraintTop_toBottomOf="@id/artistName" />
+            app:layout_constraintTop_toBottomOf="@id/artistName"
+            app:rippleColor="@color/yp_blue"
+            app:srcCompat="@drawable/ic_add"
+            app:tint="@color/yp_white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addToFavoriteButton"
+            style="@style/PlayerFabStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/playerBackgroundIconTint"
             android:contentDescription="@string/player_add_to_favorite"
-            android:foreground="@drawable/ic_add_favorite"
-            android:foregroundGravity="center"
-            app:elevation="0dp"
             app:layout_constraintEnd_toEndOf="@id/marginEnd"
-            app:layout_constraintTop_toTopOf="@id/addToPlaylistButton" />
+            app:layout_constraintTop_toTopOf="@id/addToPlaylistButton"
+            app:rippleColor="@color/yp_red"
+            app:srcCompat="@drawable/ic_add_favorite"
+            app:tint="@color/yp_white" />
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/playButton"
-            android:layout_width="83dp"
-            android:layout_height="83dp"
-            android:backgroundTint="?attr/screenBackgroundColor"
+            style="@style/PlayerFabStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/player_play"
-            android:foreground="@drawable/ic_play_circle"
-            android:foregroundGravity="fill"
+            app:fabCustomSize="83dp"
             app:layout_constraintBottom_toBottomOf="@id/addToPlaylistButton"
             app:layout_constraintEnd_toStartOf="@id/addToFavoriteButton"
             app:layout_constraintStart_toEndOf="@id/addToPlaylistButton"
-            app:layout_constraintTop_toTopOf="@id/addToPlaylistButton" />
+            app:layout_constraintTop_toTopOf="@id/addToPlaylistButton"
+            app:maxImageSize="99dp"
+            app:rippleColor="@color/yp_text_gray"
+            app:srcCompat="@drawable/ic_play_circle"
+            app:tint="?attr/secondaryIconTint" />
 
         <TextView
             style="@style/SmallButtonTextAppearance"

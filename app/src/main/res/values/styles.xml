@@ -72,4 +72,10 @@
         <item name="titleTextColor">?attr/primaryTextColor</item>
         <item name="titleTextAppearance">@style/MediumTextView</item>
     </style>
+    
+    <style name="PlayerFabStyle" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="pressedTranslationZ">0dp</item>
+        <item name="elevation">0dp</item>
+        <item name="borderWidth">0dp</item>
+    </style>
 </resources>
