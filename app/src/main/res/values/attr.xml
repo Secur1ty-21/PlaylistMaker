@@ -13,4 +13,5 @@
     <attr name="searchEditTextBackgroundColor" format="reference"/>
     <attr name="searchEditTextIconTint" format="reference"/>
     <attr name="subtitleTrackTextColor" format="reference"/>
+    <attr name="playerBackgroundIconTint" format="reference"/>
 </resources>

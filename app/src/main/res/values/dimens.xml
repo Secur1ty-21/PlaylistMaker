@@ -8,10 +8,15 @@
     <dimen name="settings_button_height">61dp</dimen>
     <!--Common elements-->
     <dimen name="content_padding_top">14dp</dimen>
-    <dimen name="content_padding_horizontal">16dp</dimen>
-    <dimen name="text_medium_size">22sp</dimen>
-    <dimen name="text_regular_size">16sp</dimen>
-    <dimen name="text_subtitle_size">11sp</dimen>
-    <dimen name="text_small_size">14sp</dimen>
+    <dimen name="contentPaddingS">16dp</dimen>
+    <dimen name="text_XL">22sp</dimen>
+    <dimen name="text_L">16sp</dimen>
+    <dimen name="text_XS">11sp</dimen>
+    <dimen name="text_M">14sp</dimen>
+    <dimen name="text_S">13sp</dimen>
     <dimen name="margin_from_toolbar">24dp</dimen>
+    <dimen name="cornerRadiusXS">2dp</dimen>
+    <dimen name="cornerRadiusS">8dp</dimen>
+    <dimen name="contentPaddingM">24dp</dimen>
+    <dimen name="playerCoverSize">312dp</dimen>
 </resources>

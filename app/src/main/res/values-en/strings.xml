@@ -17,9 +17,17 @@
     <string name="search_update_button">Refresh</string>
     <string name="search_history_hint">You were looking for</string>
     <string name="search_history_clear_button">Clear history</string>
+    <string name="player_duration">Duration</string>
+    <string name="player_collection_name">Album</string>
+    <string name="player_year">Year</string>
+    <string name="player_genre_name">Genre</string>
+    <string name="player_country">Country</string>
     <!--Support assistant-->
     <string name="button_back_description">Back</string>
     <string name="button_clear_description">Clear</string>
     <string name="image_cover_track_description">Track cover</string>
     <string name="ic_forward">Forward arrow</string>
+    <string name="player_add_to_favorite">Add to favorite</string>
+    <string name="player_play">Play</string>
+    <string name="player_add_to_playlist">Add to Playlist</string>
 </resources>

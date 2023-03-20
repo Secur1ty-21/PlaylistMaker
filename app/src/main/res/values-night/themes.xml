@@ -31,5 +31,6 @@
         <item name="searchEditTextBackgroundColor">@color/yp_white</item>
         <item name="searchEditTextIconTint">@color/yp_black</item>
         <item name="subtitleTrackTextColor">@color/yp_white</item>
+        <item name="playerBackgroundIconTint">@color/yp_white_25alpha</item>
     </style>
 </resources>

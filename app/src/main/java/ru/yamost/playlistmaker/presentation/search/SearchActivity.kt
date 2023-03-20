@@ -2,6 +2,7 @@ package ru.yamost.playlistmaker.presentation.search
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,11 +18,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import retrofit2.Call
 import ru.yamost.playlistmaker.R
-import ru.yamost.playlistmaker.data.cache.SearchHistory
+import ru.yamost.playlistmaker.data.cache.SearchHistoryStorage
 import ru.yamost.playlistmaker.data.cache.TracksDataStore
 import ru.yamost.playlistmaker.data.model.Track
 import ru.yamost.playlistmaker.data.network.ResponseTrackList
 import ru.yamost.playlistmaker.data.network.ResultCallback
+import ru.yamost.playlistmaker.presentation.PlayerActivity
 import ru.yamost.playlistmaker.presentation.adapter.TrackListAdapter
 
 @SuppressLint("NotifyDataSetChanged")
@@ -30,6 +32,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
         private const val SEARCH_HISTORY_FILE_NAME = "Search history"
+        const val TRACK_ITEM_KEY = "Track item"
     }
 
     private var searchInputText = ""
@@ -47,17 +50,16 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var hintSearchHistory: TextView
     private lateinit var clearHistoryButton: Button
     private var requestGetTracksBySearchQuery: Call<ResponseTrackList>? = null
-    private lateinit var searchHistory: SearchHistory
+    private lateinit var searchHistoryStorage: SearchHistoryStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         initViews()
         setListeners()
-        searchHistory = SearchHistory(
+        searchHistoryStorage = SearchHistoryStorage(
             getSharedPreferences(SEARCH_HISTORY_FILE_NAME, MODE_PRIVATE)
         )
-        trackListAdapter.itemClickListener = { track -> searchHistory.addTrack(track) }
     }
 
     private fun initViews() {
@@ -111,6 +113,7 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener { onClickClearButton() }
         refreshButton.setOnClickListener { updateTrackListBySearchQuery(searchInputText) }
         clearHistoryButton.setOnClickListener { onClickClearHistoryButton() }
+        trackListAdapter.itemClickListener = { track -> onClickTrackItem(track) }
     }
 
     private fun onSearchEditorAction(actionId: Int, view: View): Boolean {
@@ -189,8 +192,15 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onClickClearHistoryButton() {
-        searchHistory.clearHistory()
+        searchHistoryStorage.clearHistory()
         hideSearchHistory()
+    }
+
+    private fun onClickTrackItem(track: Track) {
+        searchHistoryStorage.addTrack(track)
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra(TRACK_ITEM_KEY, track)
+        startActivity(intent)
     }
 
     private fun hideSearchHistory() {
@@ -204,7 +214,7 @@ class SearchActivity : AppCompatActivity() {
         if (isTimeToShowSearchHistory()) {
             errorBlock.isVisible = false
             trackList.clear()
-            trackList.addAll(searchHistory.getSearchHistory())
+            trackList.addAll(searchHistoryStorage.getSearchHistory())
             trackListAdapter.notifyDataSetChanged()
             hintSearchHistory.isVisible = true
             clearHistoryButton.isVisible = true
@@ -213,7 +223,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun isTimeToShowSearchHistory(): Boolean {
         return searchEditText.hasFocus() && searchInputText.isEmpty()
-                && searchHistory.isNotEmpty()
+                && searchHistoryStorage.isNotEmpty()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

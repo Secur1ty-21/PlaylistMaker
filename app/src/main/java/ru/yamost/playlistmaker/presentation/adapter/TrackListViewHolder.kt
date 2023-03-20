@@ -27,7 +27,7 @@ class TrackListViewHolder(parentView: ViewGroup, private val dateFormat: SimpleD
             .load(track.artworkUrl)
             .placeholder(R.drawable.ic_track_placeholder)
             .centerCrop()
-            .transform(RoundedCorners(2))
+            .transform(RoundedCorners(coverTrack.resources.getDimensionPixelSize(R.dimen.cornerRadiusXS)))
             .into(coverTrack)
         trackName.text = track.trackName
         artistName.text = track.artistName
