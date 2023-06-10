@@ -68,6 +68,17 @@
         </FrameLayout>
     </androidx.cardview.widget.CardView>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="128dp"
+        android:indeterminate="true"
+        android:progressTint="@color/yp_violet"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -118,16 +129,6 @@
                 app:cornerRadius="54dp"
                 tools:visibility="visible" />
         </LinearLayout>
-
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:visibility="invisible"
-            tools:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/block_error"

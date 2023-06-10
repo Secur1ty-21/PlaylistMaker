@@ -113,17 +113,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/player_play"
+            android:enabled="false"
             app:fabCustomSize="83dp"
             app:layout_constraintBottom_toBottomOf="@id/addToPlaylistButton"
             app:layout_constraintEnd_toStartOf="@id/addToFavoriteButton"
             app:layout_constraintStart_toEndOf="@id/addToPlaylistButton"
             app:layout_constraintTop_toTopOf="@id/addToPlaylistButton"
-            app:maxImageSize="99dp"
+            app:maxImageSize="83dp"
             app:rippleColor="@color/yp_text_gray"
             app:srcCompat="@drawable/ic_play_circle"
             app:tint="?attr/secondaryIconTint" />
 
         <TextView
+            android:id="@+id/trackProgressTime"
             style="@style/SmallButtonTextAppearance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
