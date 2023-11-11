@@ -269,6 +269,7 @@ class SearchActivity : AppCompatActivity() {
                 SEARCH_INPUT_TEXT, ""
             )
         )
+        handler.removeCallbacks(searchRequest)
         if (searchInputText.isNotEmpty()) {
             updateTrackListBySearchQuery(searchInputText)
         } else if (!errorBlock.isVisible) {
