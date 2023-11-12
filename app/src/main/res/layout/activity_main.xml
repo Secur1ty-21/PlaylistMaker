@@ -7,7 +7,7 @@
     android:background="?attr/mainScreenBackgroundColor"
     android:orientation="vertical"
     android:paddingBottom="22dp"
-    tools:context=".presentation.MainActivity">
+    tools:context=".presentation.screens.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

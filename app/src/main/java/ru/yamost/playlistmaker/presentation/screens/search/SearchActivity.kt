@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.presentation.search
+package ru.yamost.playlistmaker.presentation.screens.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -25,7 +25,7 @@ import ru.yamost.playlistmaker.data.cache.TracksDataStore
 import ru.yamost.playlistmaker.data.model.Track
 import ru.yamost.playlistmaker.data.network.ResponseTrackList
 import ru.yamost.playlistmaker.data.network.ResultCallback
-import ru.yamost.playlistmaker.presentation.PlayerActivity
+import ru.yamost.playlistmaker.presentation.screens.player.PlayerActivity
 import ru.yamost.playlistmaker.presentation.adapter.TrackListAdapter
 
 @SuppressLint("NotifyDataSetChanged")
@@ -165,6 +165,7 @@ class SearchActivity : AppCompatActivity() {
         if (searchQuery.isNotEmpty()) {
             trackList.clear()
             trackListAdapter.notifyDataSetChanged()
+            errorBlock.isVisible = false
             progressBar.isVisible = true
             requestGetTracksBySearchQuery =
                 TracksDataStore.getTracksBySearchQuery(searchQuery = searchQuery,

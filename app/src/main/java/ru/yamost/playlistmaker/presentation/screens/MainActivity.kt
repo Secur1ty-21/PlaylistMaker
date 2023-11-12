@@ -1,11 +1,11 @@
-package ru.yamost.playlistmaker.presentation
+package ru.yamost.playlistmaker.presentation.screens
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import ru.yamost.playlistmaker.R
-import ru.yamost.playlistmaker.presentation.search.SearchActivity
+import ru.yamost.playlistmaker.presentation.screens.search.SearchActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

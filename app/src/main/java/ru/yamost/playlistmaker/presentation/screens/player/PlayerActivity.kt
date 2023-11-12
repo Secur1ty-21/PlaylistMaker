@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.presentation
+package ru.yamost.playlistmaker.presentation.screens.player
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -14,29 +14,24 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.data.model.Track
-import ru.yamost.playlistmaker.presentation.search.SearchActivity
+import ru.yamost.playlistmaker.presentation.screens.search.SearchActivity
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
-
     companion object {
         private const val CURRENT_TIME_KEY = "CURRENT_TIME_KEY"
         private const val PLAYER_STATE_KEY = "PLAYER_STATE_KEY"
         private const val UPDATE_TIME_INTERVAL = 300L
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
     }
 
     private var savedCurrentTime = -1
-    private var playerState = STATE_DEFAULT
+    private var playerState = PlayerState.DEFAULT
     private var mediaPlayer = MediaPlayer()
     private lateinit var handler: Handler
     private val updateTimeProgress = object : Runnable {
         override fun run() {
-            if (playerState == STATE_PLAYING) {
+            if (playerState == PlayerState.PLAYING) {
                 trackProgressTimeText.text = dateFormat.format(mediaPlayer.currentPosition)
                 handler.postDelayed(this, UPDATE_TIME_INTERVAL)
             }
@@ -75,33 +70,35 @@ class PlayerActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         savedCurrentTime = mediaPlayer.currentPosition
         outState.putInt(CURRENT_TIME_KEY, savedCurrentTime)
-        outState.putInt(PLAYER_STATE_KEY, playerState)
+        outState.putInt(PLAYER_STATE_KEY, playerState.ordinal)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         savedCurrentTime = savedInstanceState.getInt(CURRENT_TIME_KEY)
-        playerState = savedInstanceState.getInt(PLAYER_STATE_KEY)
+        playerState = PlayerState.values()[savedInstanceState.getInt(PLAYER_STATE_KEY)]
         trackProgressTimeText.text = dateFormat.format(savedCurrentTime)
     }
 
     private fun preparePlayer() {
-        track?.previewUrl?.let {
-            mediaPlayer.setDataSource(it)
-            mediaPlayer.prepareAsync()
-            mediaPlayer.setOnPreparedListener {
+        with(mediaPlayer) {
+            track?.previewUrl?.let { url ->
+                setDataSource(url)
+            }
+            setOnPreparedListener {
                 playerButton.isEnabled = true
                 if (savedCurrentTime != -1) {
-                    mediaPlayer.seekTo(savedCurrentTime)
-                } else {
-                    playerState = STATE_PREPARED
+                    seekTo(savedCurrentTime)
                 }
+                playerState = PlayerState.PREPARED
             }
-            mediaPlayer.setOnCompletionListener {
+            setOnCompletionListener {
                 trackProgressTimeText.text = dateFormat.format(0)
-                playerState = STATE_PREPARED
+                savedCurrentTime = -1
+                playerState = PlayerState.PREPARED
                 playerButton.setImageResource(R.drawable.ic_play_circle)
             }
+            prepareAsync()
         }
     }
 
@@ -145,25 +142,25 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun onClickPlayButton() {
         when (playerState) {
-            STATE_PREPARED, STATE_PAUSED -> {
+            PlayerState.PREPARED, PlayerState.PAUSED -> {
                 startPlayer()
             }
-
-            STATE_PLAYING -> {
+            PlayerState.PLAYING -> {
                 pausePlayer()
             }
+            PlayerState.DEFAULT -> {}
         }
     }
 
     private fun startPlayer() {
-        playerState = STATE_PLAYING
+        playerState = PlayerState.PLAYING
         mediaPlayer.start()
         playerButton.setImageResource(R.drawable.ic_pause_circle)
-        handler.post(updateTimeProgress)
+        handler.postDelayed(updateTimeProgress, UPDATE_TIME_INTERVAL)
     }
 
     private fun pausePlayer() {
-        playerState = STATE_PAUSED
+        playerState = PlayerState.PAUSED
         handler.removeCallbacks(updateTimeProgress)
         mediaPlayer.pause()
         playerButton.setImageResource(R.drawable.ic_play_circle)
@@ -171,7 +168,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (playerState == STATE_PLAYING) {
+        if (playerState == PlayerState.PLAYING) {
             pausePlayer()
         }
     }

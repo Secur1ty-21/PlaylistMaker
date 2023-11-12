@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/screenBackgroundColor"
-    tools:context=".presentation.PlayerActivity">
+    tools:context=".presentation.screens.player.PlayerActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -44,6 +44,7 @@
             android:layout_width="@dimen/playerCoverSize"
             android:layout_height="@dimen/playerCoverSize"
             android:layout_marginTop="26dp"
+            android:importantForAccessibility="no"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="@id/marginEnd"
             app:layout_constraintStart_toStartOf="@id/marginStart"
