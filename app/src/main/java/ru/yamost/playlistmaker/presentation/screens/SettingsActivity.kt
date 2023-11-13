@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.presentation
+package ru.yamost.playlistmaker.presentation.screens
 
 import android.content.Intent
 import android.net.Uri

@@ -19,4 +19,5 @@
     <dimen name="cornerRadiusS">8dp</dimen>
     <dimen name="contentPaddingM">24dp</dimen>
     <dimen name="playerCoverSize">312dp</dimen>
+    <dimen name="circular_progress">44dp</dimen>
 </resources>

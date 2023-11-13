@@ -1,9 +1,11 @@
-package ru.yamost.playlistmaker.presentation.search
+package ru.yamost.playlistmaker.presentation.screens.search
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -23,13 +25,15 @@ import ru.yamost.playlistmaker.data.cache.TracksDataStore
 import ru.yamost.playlistmaker.data.model.Track
 import ru.yamost.playlistmaker.data.network.ResponseTrackList
 import ru.yamost.playlistmaker.data.network.ResultCallback
-import ru.yamost.playlistmaker.presentation.PlayerActivity
+import ru.yamost.playlistmaker.presentation.screens.player.PlayerActivity
 import ru.yamost.playlistmaker.presentation.adapter.TrackListAdapter
 
 @SuppressLint("NotifyDataSetChanged")
 class SearchActivity : AppCompatActivity() {
 
     companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val ITEM_CLICKED_DEBOUNCE_DELAY = 1000L
         private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
         private const val SEARCH_HISTORY_FILE_NAME = "Search history"
         const val TRACK_ITEM_KEY = "Track item"
@@ -51,15 +55,19 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var clearHistoryButton: Button
     private var requestGetTracksBySearchQuery: Call<ResponseTrackList>? = null
     private lateinit var searchHistoryStorage: SearchHistoryStorage
+    private lateinit var handler: Handler
+    private val searchRequest = Runnable {
+        closeKeyboard(searchEditText)
+        updateTrackListBySearchQuery(searchInputText)
+    }
+    private var isTrackItemClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         initViews()
         setListeners()
-        searchHistoryStorage = SearchHistoryStorage(
-            getSharedPreferences(SEARCH_HISTORY_FILE_NAME, MODE_PRIVATE)
-        )
+        initObjects()
     }
 
     private fun initViews() {
@@ -85,7 +93,8 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
+                handler.removeCallbacks(searchRequest)
+                handler.postDelayed(searchRequest, SEARCH_DEBOUNCE_DELAY)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -111,17 +120,23 @@ class SearchActivity : AppCompatActivity() {
             onSearchEditorAction(actionId, searchEditText)
         }
         clearButton.setOnClickListener { onClickClearButton() }
-        refreshButton.setOnClickListener { updateTrackListBySearchQuery(searchInputText) }
+        refreshButton.setOnClickListener { onClickRefreshButton() }
         clearHistoryButton.setOnClickListener { onClickClearHistoryButton() }
         trackListAdapter.itemClickListener = { track -> onClickTrackItem(track) }
+    }
+
+    private fun initObjects() {
+        searchHistoryStorage = SearchHistoryStorage(
+            getSharedPreferences(SEARCH_HISTORY_FILE_NAME, MODE_PRIVATE)
+        )
+        handler = Handler(Looper.getMainLooper())
     }
 
     private fun onSearchEditorAction(actionId: Int, view: View): Boolean {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             closeKeyboard(view)
-            if (searchInputText.isNotEmpty()) {
-                updateTrackListBySearchQuery(searchInputText)
-            }
+            handler.removeCallbacks(searchRequest)
+            updateTrackListBySearchQuery(searchInputText)
             return true
         }
         return false
@@ -141,26 +156,34 @@ class SearchActivity : AppCompatActivity() {
         closeKeyboard(searchEditText)
     }
 
+    private fun onClickRefreshButton() {
+        errorBlock.isVisible = false
+        updateTrackListBySearchQuery(searchInputText)
+    }
+
     private fun updateTrackListBySearchQuery(searchQuery: String) {
-        trackList.clear()
-        trackListAdapter.notifyDataSetChanged()
-        progressBar.isVisible = true
-        requestGetTracksBySearchQuery =
-            TracksDataStore.getTracksBySearchQuery(searchQuery = searchQuery,
-                resultCallback = object : ResultCallback<List<Track>> {
-                    override fun onSuccess(data: List<Track>) {
-                        if (data.isEmpty()) {
-                            updateUiWithSearchStatus(SearchStatus.EMPTY_RESULT)
-                        } else {
-                            updateUiWithSearchStatus(SearchStatus.SUCCESS, data)
+        if (searchQuery.isNotEmpty()) {
+            trackList.clear()
+            trackListAdapter.notifyDataSetChanged()
+            errorBlock.isVisible = false
+            progressBar.isVisible = true
+            requestGetTracksBySearchQuery =
+                TracksDataStore.getTracksBySearchQuery(searchQuery = searchQuery,
+                    resultCallback = object : ResultCallback<List<Track>> {
+                        override fun onSuccess(data: List<Track>) {
+                            if (data.isEmpty()) {
+                                updateUiWithSearchStatus(SearchStatus.EMPTY_RESULT)
+                            } else {
+                                updateUiWithSearchStatus(SearchStatus.SUCCESS, data)
+                            }
+                        }
+
+                        override fun onFailure(error: Throwable) {
+                            updateUiWithSearchStatus(SearchStatus.CONNECTION_ERROR)
                         }
                     }
-
-                    override fun onFailure(error: Throwable) {
-                        updateUiWithSearchStatus(SearchStatus.CONNECTION_ERROR)
-                    }
-                }
-            )
+                )
+        }
     }
 
     private fun updateUiWithSearchStatus(
@@ -175,9 +198,11 @@ class SearchActivity : AppCompatActivity() {
                 trackList.addAll(data)
                 trackListAdapter.notifyDataSetChanged()
             }
+
             SearchStatus.EMPTY_RESULT -> {
                 showError(R.drawable.ic_not_found, R.string.search_not_found)
             }
+
             SearchStatus.CONNECTION_ERROR -> {
                 showError(R.drawable.ic_no_connection, R.string.search_no_connection)
                 refreshButton.isVisible = true
@@ -197,10 +222,22 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onClickTrackItem(track: Track) {
-        searchHistoryStorage.addTrack(track)
-        val intent = Intent(this, PlayerActivity::class.java)
-        intent.putExtra(TRACK_ITEM_KEY, track)
-        startActivity(intent)
+        if (debounceTrackItemClick()) {
+            searchHistoryStorage.addTrack(track)
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra(TRACK_ITEM_KEY, track)
+            startActivity(intent)
+        }
+    }
+
+    private fun debounceTrackItemClick(): Boolean {
+        val current = isTrackItemClickAllowed
+        if (current) {
+            isTrackItemClickAllowed = false
+            handler.postDelayed({ isTrackItemClickAllowed = true }, ITEM_CLICKED_DEBOUNCE_DELAY)
+            return true
+        }
+        return false
     }
 
     private fun hideSearchHistory() {
@@ -233,6 +270,7 @@ class SearchActivity : AppCompatActivity() {
                 SEARCH_INPUT_TEXT, ""
             )
         )
+        handler.removeCallbacks(searchRequest)
         if (searchInputText.isNotEmpty()) {
             updateTrackListBySearchQuery(searchInputText)
         } else if (!errorBlock.isVisible) {
@@ -247,6 +285,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacks(searchRequest)
         requestGetTracksBySearchQuery?.cancel()
     }
 }
