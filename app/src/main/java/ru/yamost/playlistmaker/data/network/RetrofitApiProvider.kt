@@ -6,8 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import java.util.concurrent.TimeUnit
 
-object ApiProvider {
-
+object RetrofitApiProvider {
     private const val BASE_URL = "https://itunes.apple.com"
     private const val TIMEOUT_IN_SECOND = 10L
     val tracksService: TracksService by lazy { buildRetrofit().create() }

@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.presentation.screens.player
+package ru.yamost.playlistmaker.domain.model
 
 enum class PlayerState {
     DEFAULT,

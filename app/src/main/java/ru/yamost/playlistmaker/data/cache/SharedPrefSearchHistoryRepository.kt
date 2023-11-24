@@ -3,9 +3,11 @@ package ru.yamost.playlistmaker.data.cache
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ru.yamost.playlistmaker.data.model.Track
+import ru.yamost.playlistmaker.domain.api.SearchHistoryRepository
+import ru.yamost.playlistmaker.domain.model.Track
 
-class SearchHistoryStorage(private val sharedPreferences: SharedPreferences) {
+class SharedPrefSearchHistoryRepository(private val sharedPreferences: SharedPreferences) :
+    SearchHistoryRepository {
     companion object {
         private const val SEARCH_HISTORY_KEY = "searchHistory"
         private const val MAX_TRACKS_IN_SEARCH_HISTORY = 10
@@ -13,9 +15,9 @@ class SearchHistoryStorage(private val sharedPreferences: SharedPreferences) {
 
     private val gson = Gson()
     private var trackList = ArrayList<Track>()
-    private val typeOfArrayList = object : TypeToken<ArrayList<Track>>(){}.type
+    private val typeOfArrayList = object : TypeToken<ArrayList<Track>>() {}.type
 
-    fun addTrack(track: Track) {
+    override fun saveTrack(track: Track) {
         val tracksJson = sharedPreferences.getString(SEARCH_HISTORY_KEY, null)
         if (tracksJson != null) {
             trackList = gson.fromJson(tracksJson, typeOfArrayList)
@@ -41,19 +43,19 @@ class SearchHistoryStorage(private val sharedPreferences: SharedPreferences) {
         return false
     }
 
-    fun clearHistory() {
+    override fun clear() {
         trackList.clear()
         sharedPreferences.edit().clear().apply()
     }
 
-    fun getSearchHistory(): List<Track> {
+    override fun getHistory(): List<Track> {
         val tracksJson = sharedPreferences.getString(SEARCH_HISTORY_KEY, null)
         if (tracksJson != null) {
             trackList = gson.fromJson(tracksJson, typeOfArrayList)
             return trackList
         }
-        return ArrayList()
+        return listOf()
     }
 
-    fun isNotEmpty() = sharedPreferences.contains(SEARCH_HISTORY_KEY)
+    override fun isNotEmpty() = sharedPreferences.contains(SEARCH_HISTORY_KEY)
 }

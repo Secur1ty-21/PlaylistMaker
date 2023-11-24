@@ -1,19 +1,16 @@
-package ru.yamost.playlistmaker.presentation.adapter
+package ru.yamost.playlistmaker.presentation.search
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.yamost.playlistmaker.data.model.Track
-import java.text.SimpleDateFormat
-import java.util.*
+import ru.yamost.playlistmaker.domain.model.Track
 
 class TrackListAdapter(
     private val trackList: List<Track>
 ) : RecyclerView.Adapter<TrackListViewHolder>() {
-    private val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
     var itemClickListener: ((Track) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackListViewHolder {
-        return TrackListViewHolder(parent, dateFormat)
+        return TrackListViewHolder(parent)
     }
 
     override fun getItemCount() = trackList.size

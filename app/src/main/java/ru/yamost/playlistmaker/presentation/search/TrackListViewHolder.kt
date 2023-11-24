@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.presentation.adapter
+package ru.yamost.playlistmaker.presentation.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.yamost.playlistmaker.R
-import ru.yamost.playlistmaker.data.model.Track
-import java.text.SimpleDateFormat
+import ru.yamost.playlistmaker.domain.model.Track
 
-class TrackListViewHolder(parentView: ViewGroup, private val dateFormat: SimpleDateFormat) :
+class TrackListViewHolder(parentView: ViewGroup) :
     RecyclerView.ViewHolder(
         LayoutInflater.from(parentView.context)
             .inflate(R.layout.item_track, parentView, false)
@@ -29,11 +28,11 @@ class TrackListViewHolder(parentView: ViewGroup, private val dateFormat: SimpleD
             .centerCrop()
             .transform(RoundedCorners(coverTrack.resources.getDimensionPixelSize(R.dimen.cornerRadiusXS)))
             .into(coverTrack)
-        trackName.text = track.trackName
-        artistName.text = track.artistName
+        trackName.text = track.name
+        artistName.text = track.artist
         trackTime.text = trackTime.context.getString(
             R.string.time_of_track,
-            dateFormat.format(track.trackTimeMillis.toLong())
+            track.time
         )
     }
 }
