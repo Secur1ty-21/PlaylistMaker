@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/screenBackgroundColor"
     android:orientation="vertical"
-    tools:context=".presentation.screens.search.SearchActivity">
+    tools:context=".ui.search.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

@@ -1,13 +1,8 @@
-package ru.yamost.playlistmaker.data.model
+package ru.yamost.playlistmaker.data.dto
 
-import android.os.Parcelable
-import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
-@Keep
-@Parcelize
-data class Track(
+data class TrackDto(
     @SerializedName("trackId") val id: Int,
     val trackName: String,
     val artistName: String,
@@ -18,4 +13,4 @@ data class Track(
     val primaryGenreName: String?,
     val country: String?,
     val previewUrl: String?
-) : Parcelable
+)

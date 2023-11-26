@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.presentation.screens.search
+package ru.yamost.playlistmaker.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,19 +18,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
-import retrofit2.Call
+import ru.yamost.playlistmaker.Creator
 import ru.yamost.playlistmaker.R
-import ru.yamost.playlistmaker.data.cache.SearchHistoryStorage
-import ru.yamost.playlistmaker.data.cache.TracksDataStore
-import ru.yamost.playlistmaker.data.model.Track
-import ru.yamost.playlistmaker.data.network.ResponseTrackList
-import ru.yamost.playlistmaker.data.network.ResultCallback
-import ru.yamost.playlistmaker.presentation.screens.player.PlayerActivity
-import ru.yamost.playlistmaker.presentation.adapter.TrackListAdapter
+import ru.yamost.playlistmaker.domain.api.SearchHistoryInteractor
+import ru.yamost.playlistmaker.domain.api.TracksInteractor
+import ru.yamost.playlistmaker.domain.model.SearchStatus
+import ru.yamost.playlistmaker.domain.model.Track
+import ru.yamost.playlistmaker.presentation.search.TrackListAdapter
+import ru.yamost.playlistmaker.ui.player.PlayerActivity
 
 @SuppressLint("NotifyDataSetChanged")
 class SearchActivity : AppCompatActivity() {
-
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val ITEM_CLICKED_DEBOUNCE_DELAY = 1000L
@@ -39,9 +37,6 @@ class SearchActivity : AppCompatActivity() {
         const val TRACK_ITEM_KEY = "Track item"
     }
 
-    private var searchInputText = ""
-    private val trackList = mutableListOf<Track>()
-    private val trackListAdapter = TrackListAdapter(trackList)
     private lateinit var tracksRecycler: RecyclerView
     private lateinit var errorBlock: LinearLayout
     private lateinit var errorMessage: TextView
@@ -53,14 +48,17 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var topAppBar: MaterialToolbar
     private lateinit var hintSearchHistory: TextView
     private lateinit var clearHistoryButton: Button
-    private var requestGetTracksBySearchQuery: Call<ResponseTrackList>? = null
-    private lateinit var searchHistoryStorage: SearchHistoryStorage
+    private lateinit var historyInteractor: SearchHistoryInteractor
     private lateinit var handler: Handler
+    private lateinit var searchInteractor: TracksInteractor
+    private var searchInputText = ""
+    private var isTrackItemClickAllowed = true
+    private val trackList = mutableListOf<Track>()
+    private val trackListAdapter = TrackListAdapter(trackList)
     private val searchRequest = Runnable {
         closeKeyboard(searchEditText)
         updateTrackListBySearchQuery(searchInputText)
     }
-    private var isTrackItemClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +99,10 @@ class SearchActivity : AppCompatActivity() {
                 if (s.isNullOrEmpty()) {
                     clearButton.isVisible = false
                     searchInputText = ""
+
                     if (searchEditText.hasFocus()) {
+                        handler.removeCallbacks(searchRequest)
+                        errorBlock.isVisible = false
                         showSearchHistory()
                     } else {
                         hideSearchHistory()
@@ -126,9 +127,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun initObjects() {
-        searchHistoryStorage = SearchHistoryStorage(
+        historyInteractor = Creator.provideSearchHistoryInteractor(
             getSharedPreferences(SEARCH_HISTORY_FILE_NAME, MODE_PRIVATE)
         )
+        searchInteractor = Creator.provideTracksInteractor()
         handler = Handler(Looper.getMainLooper())
     }
 
@@ -167,29 +169,20 @@ class SearchActivity : AppCompatActivity() {
             trackListAdapter.notifyDataSetChanged()
             errorBlock.isVisible = false
             progressBar.isVisible = true
-            requestGetTracksBySearchQuery =
-                TracksDataStore.getTracksBySearchQuery(searchQuery = searchQuery,
-                    resultCallback = object : ResultCallback<List<Track>> {
-                        override fun onSuccess(data: List<Track>) {
-                            if (data.isEmpty()) {
-                                updateUiWithSearchStatus(SearchStatus.EMPTY_RESULT)
-                            } else {
-                                updateUiWithSearchStatus(SearchStatus.SUCCESS, data)
-                            }
-                        }
-
-                        override fun onFailure(error: Throwable) {
-                            updateUiWithSearchStatus(SearchStatus.CONNECTION_ERROR)
+            searchInteractor.searchTracks(
+                text = searchQuery,
+                consumer = object : TracksInteractor.TracksConsumer {
+                    override fun consume(trackList: List<Track>, searchStatus: SearchStatus) {
+                        runOnUiThread {
+                            updateUiWithSearchStatus(searchStatus, trackList)
                         }
                     }
-                )
+                }
+            )
         }
     }
 
-    private fun updateUiWithSearchStatus(
-        searchStatus: SearchStatus,
-        data: List<Track> = emptyList()
-    ) {
+    private fun updateUiWithSearchStatus(searchStatus: SearchStatus, data: List<Track>) {
         progressBar.isVisible = false
         refreshButton.isVisible = false
         when (searchStatus) {
@@ -217,15 +210,21 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onClickClearHistoryButton() {
-        searchHistoryStorage.clearHistory()
+        historyInteractor.clearHistory()
         hideSearchHistory()
     }
 
     private fun onClickTrackItem(track: Track) {
         if (debounceTrackItemClick()) {
-            searchHistoryStorage.addTrack(track)
+            historyInteractor.saveTrack(track)
             val intent = Intent(this, PlayerActivity::class.java)
-            intent.putExtra(TRACK_ITEM_KEY, track)
+            intent.putExtra(
+                TRACK_ITEM_KEY,
+                track.copy(
+                    artworkUrl = track.artworkUrl
+                        .replaceAfterLast('/', "512x512bb.jpg")
+                )
+            )
             startActivity(intent)
         }
     }
@@ -251,7 +250,7 @@ class SearchActivity : AppCompatActivity() {
         if (isTimeToShowSearchHistory()) {
             errorBlock.isVisible = false
             trackList.clear()
-            trackList.addAll(searchHistoryStorage.getSearchHistory())
+            trackList.addAll(historyInteractor.getHistory())
             trackListAdapter.notifyDataSetChanged()
             hintSearchHistory.isVisible = true
             clearHistoryButton.isVisible = true
@@ -260,7 +259,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun isTimeToShowSearchHistory(): Boolean {
         return searchEditText.hasFocus() && searchInputText.isEmpty()
-                && searchHistoryStorage.isNotEmpty()
+                && historyInteractor.isHistoryExist()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -286,6 +285,5 @@ class SearchActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(searchRequest)
-        requestGetTracksBySearchQuery?.cancel()
     }
 }
