@@ -9,6 +9,8 @@ import ru.yamost.playlistmaker.search.data.DateTimeRepositoryImpl
 import ru.yamost.playlistmaker.search.data.TrackRepositoryImpl
 import ru.yamost.playlistmaker.search.data.network.RetrofitNetworkClient
 import ru.yamost.playlistmaker.search.data.storage.SharedPrefSearchHistoryRepository
+import ru.yamost.playlistmaker.search.data.storage.TrackStorageMapper
+import ru.yamost.playlistmaker.search.data.storage.dto.TrackStorageDto
 import ru.yamost.playlistmaker.search.domain.api.DateTimeRepository
 import ru.yamost.playlistmaker.search.domain.api.SearchHistoryInteractor
 import ru.yamost.playlistmaker.search.domain.api.SearchHistoryRepository
@@ -16,6 +18,7 @@ import ru.yamost.playlistmaker.search.domain.api.TrackRepository
 import ru.yamost.playlistmaker.search.domain.api.TracksInteractor
 import ru.yamost.playlistmaker.search.domain.impl.SearchHistoryInteractorImpl
 import ru.yamost.playlistmaker.search.domain.impl.TrackInteractorImpl
+import ru.yamost.playlistmaker.search.domain.model.Track
 import ru.yamost.playlistmaker.settings.data.SharedPrefSettingsRepository
 import ru.yamost.playlistmaker.settings.domain.api.SettingsRepository
 import ru.yamost.playlistmaker.sharing.data.ExternalNavigatorImpl
@@ -24,6 +27,7 @@ import ru.yamost.playlistmaker.sharing.domain.api.ExternalNavigator
 import ru.yamost.playlistmaker.sharing.domain.api.SharingInteractor
 import ru.yamost.playlistmaker.sharing.domain.api.SharingStringResRepository
 import ru.yamost.playlistmaker.sharing.domain.impl.SharingInteractorImpl
+import ru.yamost.playlistmaker.util.Mapper
 
 object Creator {
     private fun getDateTimeRepository(): DateTimeRepository {
@@ -52,8 +56,12 @@ object Creator {
         )
     }
 
+    private fun getTrackStorageMapper(): Mapper<List<Track>, List<TrackStorageDto>> {
+        return TrackStorageMapper()
+    }
+
     private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
-        return SharedPrefSearchHistoryRepository(context)
+        return SharedPrefSearchHistoryRepository(context, getTrackStorageMapper())
     }
 
     fun provideSearchHistoryInteractor(context: Context): SearchHistoryInteractor {

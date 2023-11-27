@@ -1,7 +1,9 @@
 package ru.yamost.playlistmaker.search.data.network.dto
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class TrackDto(
     @SerializedName("trackId") val id: Int,
     val trackName: String,

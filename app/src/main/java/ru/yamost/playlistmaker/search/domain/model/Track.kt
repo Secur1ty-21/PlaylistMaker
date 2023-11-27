@@ -1,10 +1,8 @@
 package ru.yamost.playlistmaker.search.domain.model
 
 import android.os.Parcelable
-import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 
-@Keep
 @Parcelize
 data class Track(
     val id: Int,
