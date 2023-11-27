@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/screenBackgroundColor"
-    tools:context=".ui.player.PlayerActivity">
+    tools:context=".player.ui.PlayerActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -114,7 +114,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/player_play"
-            android:enabled="false"
             app:fabCustomSize="83dp"
             app:layout_constraintBottom_toBottomOf="@id/addToPlaylistButton"
             app:layout_constraintEnd_toStartOf="@id/addToFavoriteButton"
