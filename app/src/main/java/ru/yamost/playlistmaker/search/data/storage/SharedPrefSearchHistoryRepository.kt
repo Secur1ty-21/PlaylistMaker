@@ -1,7 +1,6 @@
 package ru.yamost.playlistmaker.search.data.storage
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.yamost.playlistmaker.search.data.storage.dto.TrackStorageDto
@@ -10,19 +9,15 @@ import ru.yamost.playlistmaker.search.domain.model.Track
 import ru.yamost.playlistmaker.util.Mapper
 
 class SharedPrefSearchHistoryRepository(
-    context: Context,
-    private val mapper: Mapper<List<Track>, List<TrackStorageDto>>
-) :
-    SearchHistoryRepository {
+    private val mapper: Mapper<List<Track>, List<TrackStorageDto>>,
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson
+) : SearchHistoryRepository {
     companion object {
         private const val SEARCH_HISTORY_KEY = "searchHistory"
         private const val MAX_TRACKS_IN_SEARCH_HISTORY = 10
-        private const val SEARCH_HISTORY_FILE_NAME = "Search history"
     }
 
-    private val sharedPreferences =
-        context.getSharedPreferences(SEARCH_HISTORY_FILE_NAME, MODE_PRIVATE)
-    private val gson = Gson()
     private var trackList = ArrayList<TrackStorageDto>()
     private val typeOfArrayList = object : TypeToken<ArrayList<TrackStorageDto>>() {}.type
 
@@ -38,9 +33,7 @@ class SharedPrefSearchHistoryRepository(
             }
         }
         trackList.add(0, mappedTrack)
-        sharedPreferences.edit()
-            .putString(SEARCH_HISTORY_KEY, gson.toJson(trackList))
-            .apply()
+        sharedPreferences.edit().putString(SEARCH_HISTORY_KEY, gson.toJson(trackList)).apply()
     }
 
     private fun isAlreadyInHistory(track: Track): Boolean {

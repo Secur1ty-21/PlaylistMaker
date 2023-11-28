@@ -4,8 +4,9 @@ import ru.yamost.playlistmaker.player.domain.model.PlayerState
 
 interface PlayerController {
     val currentPosition: Int
-    var currentState: PlayerState
+    val currentState: PlayerState
     fun prepare(
+        trackUrl: String,
         onReadyListener: () -> Unit,
         onEndTrackListener: () -> Unit,
         onErrorPrepared: () -> Unit

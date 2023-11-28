@@ -2,7 +2,6 @@ package ru.yamost.playlistmaker.search.data
 
 import ru.yamost.playlistmaker.search.data.network.dto.TrackSearchRequest
 import ru.yamost.playlistmaker.search.data.network.dto.TrackSearchResponse
-import ru.yamost.playlistmaker.search.domain.api.DateTimeRepository
 import ru.yamost.playlistmaker.search.domain.api.TrackRepository
 import ru.yamost.playlistmaker.search.domain.model.SearchErrorStatus
 import ru.yamost.playlistmaker.search.domain.model.Track
@@ -10,14 +9,9 @@ import ru.yamost.playlistmaker.util.Resource
 import java.text.SimpleDateFormat
 
 class TrackRepositoryImpl(
-    dateTimeRepository: DateTimeRepository,
+    private val formatter: SimpleDateFormat,
     private val networkClient: NetworkClient
 ) : TrackRepository {
-    private val formatter = SimpleDateFormat(
-        dateTimeRepository.getTrackTimeFormat(),
-        dateTimeRepository.getPreferredLocale()
-    )
-
     override fun searchTracks(searchQuery: String): Resource<List<Track>, SearchErrorStatus> {
         val response = networkClient.doSearchTrackRequest(TrackSearchRequest(searchQuery))
         if (response.resultCode == 200) {

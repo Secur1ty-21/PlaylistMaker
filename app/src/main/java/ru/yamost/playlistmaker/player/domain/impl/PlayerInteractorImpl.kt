@@ -3,32 +3,28 @@ package ru.yamost.playlistmaker.player.domain.impl
 import ru.yamost.playlistmaker.player.domain.api.PlayerController
 import ru.yamost.playlistmaker.player.domain.api.PlayerInteractor
 import ru.yamost.playlistmaker.player.domain.model.PlayerState
-import ru.yamost.playlistmaker.search.domain.api.DateTimeRepository
 import java.text.SimpleDateFormat
-import java.util.concurrent.Executors
 
 class PlayerInteractorImpl(
-    dateTimeRepository: DateTimeRepository,
+    private val formatter: SimpleDateFormat,
     private val playerController: PlayerController,
 ) : PlayerInteractor {
-    private val formatter = SimpleDateFormat(
-        dateTimeRepository.getTrackTimeFormat(),
-        dateTimeRepository.getPreferredLocale()
-    )
-    private val executor = Executors.newCachedThreadPool()
-    override val playedTime: Int
-        get() = playerController.currentPosition
+    companion object {
+        private const val MAX_AVAILABLE_TRACK_DURATION = 30_000L
+    }
+
+    override val formatAvailableTrackDuration: String =
+        formatter.format(MAX_AVAILABLE_TRACK_DURATION)
     override val currentState: PlayerState
         get() = playerController.currentState
 
-    override fun prepare(consumer: PlayerInteractor.PlayerConsumer) {
-        executor.execute {
-            playerController.prepare(
-                { consumer.onReadyForUse() },
-                { consumer.onTrackEnd() },
-                { consumer.onError() }
-            )
-        }
+    override fun prepare(trackUrl: String, consumer: PlayerInteractor.PlayerConsumer) {
+        playerController.prepare(
+            trackUrl = trackUrl,
+            onReadyListener = { consumer.onReadyForUse() },
+            onEndTrackListener = { consumer.onTrackEnd() },
+            onErrorPrepared = { consumer.onError() }
+        )
     }
 
     override fun play() {
@@ -44,6 +40,6 @@ class PlayerInteractorImpl(
     }
 
     override fun formatPlayedTime(): String {
-        return formatter.format(playedTime)
+        return formatter.format(playerController.currentPosition)
     }
 }

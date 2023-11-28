@@ -1,21 +1,20 @@
 package ru.yamost.playlistmaker.player.ui
 
 import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import ru.yamost.playlistmaker.R
-import ru.yamost.playlistmaker.creator.Creator
 import ru.yamost.playlistmaker.player.domain.api.PlayerInteractor
 import ru.yamost.playlistmaker.player.domain.model.PlayerState
 import ru.yamost.playlistmaker.player.ui.model.PlayerScreenState
 import ru.yamost.playlistmaker.search.domain.model.Track
 
-class PlayerViewModel(track: Track?) : ViewModel() {
+class PlayerViewModel(
+    track: Track?,
+    private val interactor: PlayerInteractor,
+    private val handler: Handler
+) : ViewModel() {
     private val pauseDrawableRes = R.drawable.ic_pause_circle
     private val playDrawableRes = R.drawable.ic_play_circle
     private val _trackInfoState = MutableLiveData<Track?>(
@@ -26,12 +25,9 @@ class PlayerViewModel(track: Track?) : ViewModel() {
     )
     val trackInfoState: LiveData<Track?> get() = _trackInfoState
     private val _playerScreenState = MutableLiveData<PlayerScreenState>(
-        PlayerScreenState.PlayedTime("00:30")
+        PlayerScreenState.PlayedTime(interactor.formatAvailableTrackDuration)
     )
     val playerScreenState: LiveData<PlayerScreenState> get() = _playerScreenState
-    private val interactor =
-        Creator.providePlayerInteractor(_trackInfoState.value?.previewUrl ?: "")
-    private val handler = Handler(Looper.getMainLooper())
     private val updateTimeProgress = object : Runnable {
         override fun run() {
             if (interactor.currentState == PlayerState.PLAYING) {
@@ -44,17 +40,19 @@ class PlayerViewModel(track: Track?) : ViewModel() {
     }
 
     init {
-        preparePlayer()
+        preparePlayer(track?.previewUrl ?: "")
     }
 
-    private fun preparePlayer() {
+    private fun preparePlayer(trackUrl: String) {
         _playerScreenState.value = PlayerScreenState.PlayButtonState(
             drawableRes = playDrawableRes, isEnabled = false
         )
-        interactor.prepare(object : PlayerInteractor.PlayerConsumer {
+        interactor.prepare(trackUrl, object : PlayerInteractor.PlayerConsumer {
             override fun onReadyForUse() {
                 _playerScreenState.value = PlayerScreenState.PlayButtonState(
-                    drawableRes = playDrawableRes, isEnabled = true, playedTime = "00:30"
+                    drawableRes = playDrawableRes,
+                    isEnabled = true,
+                    playedTime = interactor.formatAvailableTrackDuration
                 )
             }
 
@@ -65,7 +63,7 @@ class PlayerViewModel(track: Track?) : ViewModel() {
             }
 
             override fun onError() {
-                preparePlayer()
+                preparePlayer(trackUrl)
             }
         })
     }
@@ -89,27 +87,18 @@ class PlayerViewModel(track: Track?) : ViewModel() {
     }
 
     fun pause() {
-        interactor.pause()
-        _playerScreenState.value = PlayerScreenState.PlayButtonState(
-            drawableRes = playDrawableRes,
-            isEnabled = true,
-            playedTime = interactor.formatPlayedTime()
-        )
-        handler.removeCallbacks(updateTimeProgress)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        interactor.clearMemory()
+        if (interactor.currentState == PlayerState.PLAYING) {
+            interactor.pause()
+            _playerScreenState.value = PlayerScreenState.PlayButtonState(
+                drawableRes = playDrawableRes,
+                isEnabled = true,
+                playedTime = interactor.formatPlayedTime()
+            )
+            handler.removeCallbacks(updateTimeProgress)
+        }
     }
 
     companion object {
         private const val UPDATE_TIME_INTERVAL = 300L
-
-        fun getViewModelFactory(track: Track?): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(track)
-            }
-        }
     }
 }

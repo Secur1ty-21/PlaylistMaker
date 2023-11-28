@@ -16,7 +16,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.databinding.ActivitySearchBinding
 import ru.yamost.playlistmaker.player.ui.PlayerActivity
@@ -33,8 +33,8 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var handler: Handler
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var viewModel: SearchViewModel
     private var isTrackItemClickAllowed = true
+    private val viewModel by viewModel<SearchViewModel>()
     private val trackList = mutableListOf<Track>()
     private val trackListAdapter = TrackListAdapter(trackList)
 
@@ -43,9 +43,6 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         handler = Handler(Looper.getMainLooper())
-        viewModel = ViewModelProvider(
-            this, SearchViewModel.getViewModelFactory(application)
-        )[SearchViewModel::class.java]
         binding.trackList.adapter = trackListAdapter
         setListeners()
         viewModel.getSearchScreenState().observe(this) {

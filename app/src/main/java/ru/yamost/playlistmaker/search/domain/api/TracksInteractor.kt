@@ -5,6 +5,7 @@ import ru.yamost.playlistmaker.search.domain.model.SearchErrorStatus
 import ru.yamost.playlistmaker.util.Resource
 
 interface TracksInteractor {
+    val lastFondedTrackList: List<Track>
     fun searchTracks(text: String, consumer: TracksConsumer)
 
     interface TracksConsumer {
