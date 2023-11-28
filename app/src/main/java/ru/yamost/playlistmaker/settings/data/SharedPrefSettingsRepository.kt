@@ -1,17 +1,12 @@
 package ru.yamost.playlistmaker.settings.data
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import ru.yamost.playlistmaker.settings.domain.api.SettingsRepository
 import ru.yamost.playlistmaker.settings.domain.model.ThemeSettings
 
 class SharedPrefSettingsRepository(
-    context: Context
+    private val sharedPreferences: SharedPreferences
 ) : SettingsRepository {
-    private val sharedPreferences = context.getSharedPreferences(
-        SETTINGS_FILE_NAME, MODE_PRIVATE
-    )
-
     override fun getThemeSettings(): ThemeSettings {
         return ThemeSettings(
             isDarkTheme = sharedPreferences.getBoolean(
@@ -29,7 +24,6 @@ class SharedPrefSettingsRepository(
     }
 
     companion object {
-        private const val SETTINGS_FILE_NAME = "Settings"
         private const val KEY_THEME_SETTINGS = "isDarkTheme"
     }
 }

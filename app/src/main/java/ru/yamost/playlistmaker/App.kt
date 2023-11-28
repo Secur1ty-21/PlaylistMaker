@@ -3,16 +3,24 @@ package ru.yamost.playlistmaker
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import ru.yamost.playlistmaker.creator.Creator
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 import ru.yamost.playlistmaker.settings.domain.api.SettingsRepository
 import ru.yamost.playlistmaker.settings.domain.model.ThemeSettings
 
 class App : Application() {
-    private lateinit var settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository by inject()
 
     override fun onCreate() {
         super.onCreate()
-        settingsRepository = Creator.getSettingsRepository(this)
+        startKoin {
+            androidContext(this@App)
+            modules(DiModuleProvider.searchModules)
+            modules(DiModuleProvider.playerModules)
+            modules(DiModuleProvider.settingsModules)
+            modules(DiModuleProvider.sharingModules)
+        }
         if (settingsRepository.isThemeSettingsExist()) {
             switchTheme(settingsRepository.getThemeSettings().isDarkTheme)
         } else {

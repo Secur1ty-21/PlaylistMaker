@@ -4,9 +4,10 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.databinding.ActivityPlayerBinding
 import ru.yamost.playlistmaker.player.ui.model.PlayerScreenState
@@ -15,20 +16,17 @@ import ru.yamost.playlistmaker.search.ui.SearchActivity
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var viewModel: PlayerViewModel
-
+    private var track: Track? = null
+    private val viewModel by viewModel<PlayerViewModel> { parametersOf(track) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val track: Track? = if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
+        track = if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(SearchActivity.TRACK_ITEM_KEY, Track::class.java)
         } else {
             intent.getParcelableExtra(SearchActivity.TRACK_ITEM_KEY)
         }
-        viewModel = ViewModelProvider(
-            this, PlayerViewModel.getViewModelFactory(track)
-        )[PlayerViewModel::class.java]
         viewModel.playerScreenState.observe(this) {
             renderPlayerState(it)
         }
