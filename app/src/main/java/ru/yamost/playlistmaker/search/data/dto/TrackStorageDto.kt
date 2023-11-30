@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.search.data.storage.dto
+package ru.yamost.playlistmaker.search.data.dto
 
 import android.os.Parcelable
 import androidx.annotation.Keep

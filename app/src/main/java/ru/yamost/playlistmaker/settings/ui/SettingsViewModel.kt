@@ -1,20 +1,17 @@
 package ru.yamost.playlistmaker.settings.ui
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.yamost.playlistmaker.App
-import ru.yamost.playlistmaker.settings.domain.api.SettingsRepository
+import ru.yamost.playlistmaker.settings.domain.api.SettingsInteractor
 import ru.yamost.playlistmaker.settings.domain.model.ThemeSettings
 import ru.yamost.playlistmaker.sharing.domain.api.SharingInteractor
 
 class SettingsViewModel(
-    private val applicationContext: Context,
     private val sharingInteractor: SharingInteractor,
-    private val settingsRepository: SettingsRepository
+    private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
-    private val _isDarkTheme = MutableLiveData(settingsRepository.getThemeSettings().isDarkTheme)
+    private val _isDarkTheme = MutableLiveData(settingsInteractor.getThemeSettings().isDarkTheme)
     val isDarkTheme: LiveData<Boolean>
         get() = _isDarkTheme
 
@@ -31,10 +28,7 @@ class SettingsViewModel(
     }
 
     fun switchTheme(isDarkTheme: Boolean) {
-        settingsRepository.updateThemeSetting(
-            ThemeSettings(isDarkTheme)
-        )
-        (applicationContext as App).switchTheme(isDarkTheme)
+        settingsInteractor.updateThemeSettings(ThemeSettings(isDarkTheme))
         _isDarkTheme.value = isDarkTheme
     }
 }

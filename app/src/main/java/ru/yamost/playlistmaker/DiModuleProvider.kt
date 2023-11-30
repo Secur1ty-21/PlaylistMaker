@@ -7,6 +7,7 @@ import ru.yamost.playlistmaker.search.di.searchDataModule
 import ru.yamost.playlistmaker.search.di.searchInteractorModule
 import ru.yamost.playlistmaker.search.di.searchRepositoryModule
 import ru.yamost.playlistmaker.search.di.searchViewModelModule
+import ru.yamost.playlistmaker.settings.di.settingsInteractorModule
 import ru.yamost.playlistmaker.settings.di.settingsRepositoryModule
 import ru.yamost.playlistmaker.settings.di.settingsViewModelModule
 import ru.yamost.playlistmaker.sharing.di.sharingDataModule
@@ -27,6 +28,7 @@ object DiModuleProvider {
     )
     val settingsModules = listOf(
         settingsRepositoryModule,
+        settingsInteractorModule,
         settingsViewModelModule
     )
     val sharingModules = listOf(

@@ -1,9 +1,9 @@
-package ru.yamost.playlistmaker.search.data.storage
+package ru.yamost.playlistmaker.search.data
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ru.yamost.playlistmaker.search.data.storage.dto.TrackStorageDto
+import ru.yamost.playlistmaker.search.data.dto.TrackStorageDto
 import ru.yamost.playlistmaker.search.domain.api.SearchHistoryRepository
 import ru.yamost.playlistmaker.search.domain.model.Track
 import ru.yamost.playlistmaker.util.Mapper

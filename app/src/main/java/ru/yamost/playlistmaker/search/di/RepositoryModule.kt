@@ -8,9 +8,9 @@ import org.koin.core.scope.get
 import org.koin.dsl.module
 import ru.yamost.playlistmaker.search.data.DateTimeRepositoryImpl
 import ru.yamost.playlistmaker.search.data.TrackRepositoryImpl
-import ru.yamost.playlistmaker.search.data.storage.SharedPrefSearchHistoryRepository
-import ru.yamost.playlistmaker.search.data.storage.TrackStorageMapper
-import ru.yamost.playlistmaker.search.data.storage.dto.TrackStorageDto
+import ru.yamost.playlistmaker.search.data.SharedPrefSearchHistoryRepository
+import ru.yamost.playlistmaker.search.data.mapper.TrackStorageMapper
+import ru.yamost.playlistmaker.search.data.dto.TrackStorageDto
 import ru.yamost.playlistmaker.search.domain.api.DateTimeRepository
 import ru.yamost.playlistmaker.search.domain.api.SearchHistoryRepository
 import ru.yamost.playlistmaker.search.domain.api.TrackRepository
