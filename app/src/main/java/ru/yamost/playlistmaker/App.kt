@@ -20,6 +20,8 @@ class App : Application() {
             modules(DiModuleProvider.playerModules)
             modules(DiModuleProvider.settingsModules)
             modules(DiModuleProvider.sharingModules)
+            modules(DiModuleProvider.favoritesModules)
+            modules(DiModuleProvider.playlistModules)
         }
         if (settingsRepository.isThemeSettingsExist()) {
             themeController.switchTheme(settingsRepository.getThemeSettings().isDarkTheme)

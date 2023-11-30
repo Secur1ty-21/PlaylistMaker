@@ -38,7 +38,7 @@
     <style name="MediumTextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
-        <item name="android:textSize">@dimen/text_XL</item>
+        <item name="android:textSize">@dimen/text_XXL</item>
     </style>
 
     <style name="SmallText" parent="Widget.MaterialComponents.TextView">
@@ -72,10 +72,32 @@
         <item name="titleTextColor">?attr/primaryTextColor</item>
         <item name="titleTextAppearance">@style/MediumTextView</item>
     </style>
-    
+
     <style name="PlayerFabStyle" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="pressedTranslationZ">0dp</item>
         <item name="elevation">0dp</item>
         <item name="borderWidth">0dp</item>
+    </style>
+
+    <style name="PlaylistMakerButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">?attr/playlistMakerButtonTint</item>
+        <item name="android:textColor">?attr/playlistMakerButtonTextColor</item>
+        <item name="cornerRadius">@dimen/cornerRadiusXL</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="PlaylistMakerButtonS" parent="PlaylistMakerButton">
+        <item name="android:textAppearance">@style/SmallButtonTextAppearance</item>
+    </style>
+
+    <style name="PlaylistMakerTextMediumXL" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textSize">@dimen/text_XL</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="PlaylistMakerTabTextAppearance" parent="SmallButtonTextAppearance">
+        <item name="android:textAllCaps">false</item>
     </style>
 </resources>

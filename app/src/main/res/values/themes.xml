@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -32,5 +32,8 @@
         <item name="searchEditTextIconTint">@color/yp_text_gray</item>
         <item name="subtitleTrackTextColor">@color/yp_text_gray</item>
         <item name="playerBackgroundIconTint">@color/yp_black_25alpha</item>
+        <item name="mediaNotFoundTextColor">@color/black</item>
+        <item name="playlistMakerButtonTint">@color/yp_black</item>
+        <item name="playlistMakerButtonTextColor">@color/yp_white</item>
     </style>
 </resources>
