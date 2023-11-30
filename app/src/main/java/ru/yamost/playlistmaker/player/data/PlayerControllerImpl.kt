@@ -5,14 +5,14 @@ import ru.yamost.playlistmaker.player.domain.api.PlayerController
 import ru.yamost.playlistmaker.player.domain.model.PlayerState
 
 class PlayerControllerImpl(
-    private val trackUrl: String,
+    private val mediaPlayer: MediaPlayer
 ) : PlayerController {
-    private val mediaPlayer by lazy { MediaPlayer() }
     override var currentState = PlayerState.DEFAULT
     override val currentPosition: Int
         get() = mediaPlayer.currentPosition
 
     override fun prepare(
+        trackUrl: String,
         onReadyListener: () -> Unit,
         onEndTrackListener: () -> Unit,
         onErrorPrepared: () -> Unit
@@ -36,8 +36,7 @@ class PlayerControllerImpl(
     }
 
     override fun play() {
-        if (currentState == PlayerState.PREPARED ||
-            currentState == PlayerState.PAUSED) {
+        if (currentState == PlayerState.PREPARED || currentState == PlayerState.PAUSED) {
             mediaPlayer.start()
             currentState = PlayerState.PLAYING
         }
@@ -52,8 +51,7 @@ class PlayerControllerImpl(
 
     override fun seekTo(time: Int) {
         if (time <= 0) return
-        if (currentState == PlayerState.PREPARED ||
-            currentState == PlayerState.PAUSED) {
+        if (currentState == PlayerState.PREPARED || currentState == PlayerState.PAUSED) {
             mediaPlayer.seekTo(time)
         }
     }

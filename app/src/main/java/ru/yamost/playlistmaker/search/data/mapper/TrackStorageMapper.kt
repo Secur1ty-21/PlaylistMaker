@@ -1,6 +1,6 @@
-package ru.yamost.playlistmaker.search.data.storage
+package ru.yamost.playlistmaker.search.data.mapper
 
-import ru.yamost.playlistmaker.search.data.storage.dto.TrackStorageDto
+import ru.yamost.playlistmaker.search.data.dto.TrackStorageDto
 import ru.yamost.playlistmaker.search.domain.model.Track
 import ru.yamost.playlistmaker.util.Mapper
 
