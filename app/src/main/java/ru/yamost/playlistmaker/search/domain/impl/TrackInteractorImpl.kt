@@ -5,6 +5,7 @@ import ru.yamost.playlistmaker.search.domain.api.TracksInteractor
 import ru.yamost.playlistmaker.search.domain.model.SearchErrorStatus
 import ru.yamost.playlistmaker.search.domain.model.Track
 import ru.yamost.playlistmaker.util.Resource
+import java.io.IOException
 import java.util.concurrent.ExecutorService
 
 class TrackInteractorImpl(
@@ -19,15 +20,24 @@ class TrackInteractorImpl(
         executor.execute {
             try {
                 val result = repository.searchTracks(searchQuery = text)
-                _lastFoundedTrackList = when(result) {
+                _lastFoundedTrackList = when (result) {
                     is Resource.Error -> emptyList()
                     is Resource.Success -> result.data
                 }
                 consumer.consume(result)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                _lastFoundedTrackList = emptyList()
+                consumer.consume(Resource.Error(SearchErrorStatus.CANCELED, null))
             } catch (e: Exception) {
                 e.printStackTrace()
+                _lastFoundedTrackList = emptyList()
                 consumer.consume(Resource.Error(SearchErrorStatus.CONNECTION_ERROR, null))
             }
         }
+    }
+
+    override fun cancelRequest() {
+        repository.cancelSearchRequest()
     }
 }

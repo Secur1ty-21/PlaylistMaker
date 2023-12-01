@@ -37,4 +37,8 @@ class TrackRepositoryImpl(
             return Resource.Error(errorStatus = SearchErrorStatus.CONNECTION_ERROR)
         }
     }
+
+    override fun cancelSearchRequest() {
+        networkClient.cancelRequest()
+    }
 }

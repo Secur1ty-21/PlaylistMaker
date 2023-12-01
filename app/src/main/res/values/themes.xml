@@ -35,5 +35,9 @@
         <item name="mediaNotFoundTextColor">@color/black</item>
         <item name="playlistMakerButtonTint">@color/yp_black</item>
         <item name="playlistMakerButtonTextColor">@color/yp_white</item>
+        <item name="playlistMakerBottomNavActiveItemColor">@color/yp_blue</item>
+        <item name="playlistMakerBottomNavInactiveItemColor">@color/yp_black</item>
+        <item name="playlistMakerBottomNavBackgroundColor">@color/yp_white</item>
+        <item name="playlistMakerBottomNavDividerColor">@color/yp_light_gray</item>
     </style>
 </resources>

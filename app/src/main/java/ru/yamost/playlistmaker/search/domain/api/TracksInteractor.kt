@@ -11,4 +11,6 @@ interface TracksInteractor {
     interface TracksConsumer {
         fun consume(result: Resource<List<Track>, SearchErrorStatus>)
     }
+
+    fun cancelRequest()
 }

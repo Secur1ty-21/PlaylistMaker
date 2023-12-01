@@ -6,4 +6,6 @@ import ru.yamost.playlistmaker.util.Resource
 
 interface TrackRepository {
     fun searchTracks(searchQuery: String): Resource<List<Track>, SearchErrorStatus>
+
+    fun cancelSearchRequest()
 }

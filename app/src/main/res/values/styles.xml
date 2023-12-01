@@ -100,4 +100,10 @@
     <style name="PlaylistMakerTabTextAppearance" parent="SmallButtonTextAppearance">
         <item name="android:textAllCaps">false</item>
     </style>
+
+    <style name="PlaylistMakerBottomNavTextAppearance">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

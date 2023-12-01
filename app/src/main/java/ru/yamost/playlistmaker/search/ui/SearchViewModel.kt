@@ -99,6 +99,11 @@ class SearchViewModel(
 
     fun getSearchScreenState(): LiveData<SearchScreenState> = searchScreenState
 
+    fun onNavigateAction() {
+        handler.removeCallbacks(searchRequest)
+        searchInteractor.cancelRequest()
+    }
+
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }

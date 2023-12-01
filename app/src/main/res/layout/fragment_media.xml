@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/screenBackgroundColor"
     android:orientation="vertical"
-    tools:context=".media.ui.MediaActivity">
+    tools:context=".media.ui.MediaFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -16,7 +16,6 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
             style="@style/AppBar"
-            app:navigationIcon="@drawable/ic_arrow_back"
             app:title="@string/main_button_media" />
     </com.google.android.material.appbar.AppBarLayout>
 

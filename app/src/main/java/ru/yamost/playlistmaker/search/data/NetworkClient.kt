@@ -5,4 +5,5 @@ import ru.yamost.playlistmaker.search.data.network.dto.TrackSearchRequest
 
 interface NetworkClient {
     fun doSearchTrackRequest(dto: TrackSearchRequest): Response
+    fun cancelRequest()
 }
