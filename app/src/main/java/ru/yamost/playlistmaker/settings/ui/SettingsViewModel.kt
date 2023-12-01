@@ -28,7 +28,12 @@ class SettingsViewModel(
     }
 
     fun switchTheme(isDarkTheme: Boolean) {
-        settingsInteractor.updateThemeSettings(ThemeSettings(isDarkTheme))
+        settingsInteractor.updateUserThemeSettings(ThemeSettings(isDarkTheme))
         _isDarkTheme.value = isDarkTheme
+    }
+
+    fun onSystemUiModeChangedEvent(uiMode: Int) {
+        settingsInteractor.updateDeviceThemeSettings(uiMode)
+        _isDarkTheme.value = settingsInteractor.getThemeSettings().isDarkTheme
     }
 }

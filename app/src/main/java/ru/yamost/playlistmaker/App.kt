@@ -7,6 +7,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import ru.yamost.playlistmaker.settings.domain.api.SettingsRepository
 import ru.yamost.playlistmaker.settings.domain.api.ThemeController
+import ru.yamost.playlistmaker.settings.domain.model.ThemeSettings
 
 class App : Application() {
     private val settingsRepository: SettingsRepository by inject()
@@ -20,17 +21,32 @@ class App : Application() {
             modules(DiModuleProvider.playerModules)
             modules(DiModuleProvider.settingsModules)
             modules(DiModuleProvider.sharingModules)
+            modules(DiModuleProvider.favoritesModules)
+            modules(DiModuleProvider.playlistModules)
         }
-        if (settingsRepository.isThemeSettingsExist()) {
-            themeController.switchTheme(settingsRepository.getThemeSettings().isDarkTheme)
+        val isDarkTheme = themeController.isSystemInDarkMode(
+            resources.configuration.uiMode
+        )
+        settingsRepository.saveDeviceThemeSetting(ThemeSettings(isDarkTheme))
+        if (settingsRepository.isUserThemeSettingsExist()) {
+            themeController.switchTheme(settingsRepository.getUserThemeSettings().isDarkTheme)
         } else {
-            themeController.switchTheme(isSystemInNightMode())
+            themeController.switchTheme(isDarkTheme)
         }
     }
 
-    private fun isSystemInNightMode(): Boolean {
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (!settingsRepository.isUserThemeSettingsExist()) {
+            val isDarkTheme = themeController.isSystemInDarkMode(newConfig.uiMode)
+            settingsRepository.saveDeviceThemeSetting(ThemeSettings(isDarkTheme))
+            themeController.switchTheme(isDarkTheme)
+        }
+    }
+
+    /*private fun isSystemInNightMode(): Boolean {
         val currentUiMode = resources.configuration.uiMode
         val nightMask = Configuration.UI_MODE_NIGHT_MASK
         return currentUiMode and nightMask == Configuration.UI_MODE_NIGHT_YES
-    }
+    }*/
 }

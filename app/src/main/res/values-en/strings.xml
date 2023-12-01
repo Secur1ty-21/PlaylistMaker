@@ -30,4 +30,9 @@
     <string name="player_add_to_favorite">Add to favorite</string>
     <string name="player_play">Play</string>
     <string name="player_add_to_playlist">Add to Playlist</string>
+    <string name="favorites_media_empty">Your media library is empty</string>
+    <string name="playlist_not_created">You haven\'t created\n a single playlist</string>
+    <string name="btn_create_playlist">New playlist</string>
+    <string name="media_tab_favorites">Favorites tracks</string>
+    <string name="media_tab_playlists">Playlists</string>
 </resources>

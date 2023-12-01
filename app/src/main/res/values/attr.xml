@@ -14,4 +14,7 @@
     <attr name="searchEditTextIconTint" format="reference"/>
     <attr name="subtitleTrackTextColor" format="reference"/>
     <attr name="playerBackgroundIconTint" format="reference"/>
+    <attr name="mediaNotFoundTextColor" format="reference" />
+    <attr name="playlistMakerButtonTint" format="reference" />
+    <attr name="playlistMakerButtonTextColor" format="reference" />
 </resources>
