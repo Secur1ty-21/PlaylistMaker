@@ -10,11 +10,23 @@ class SettingsInteractorImpl(
     private val themeController: ThemeController
 ) : SettingsInteractor {
     override fun getThemeSettings(): ThemeSettings {
-        return settingsRepository.getThemeSettings()
+        return if (settingsRepository.isUserThemeSettingsExist()) {
+            settingsRepository.getUserThemeSettings()
+        } else {
+            settingsRepository.getDeviceThemeSettings()
+        }
     }
 
-    override fun updateThemeSettings(themeSettings: ThemeSettings) {
-        settingsRepository.updateThemeSetting(themeSettings)
+    override fun updateUserThemeSettings(themeSettings: ThemeSettings) {
+        settingsRepository.saveUserThemeSetting(themeSettings)
         themeController.switchTheme(isDarkTheme = themeSettings.isDarkTheme)
+    }
+
+    override fun updateDeviceThemeSettings(uiMode: Int) {
+        if (!settingsRepository.isUserThemeSettingsExist()) {
+            val isDarkTheme = themeController.isSystemInDarkMode(uiMode)
+            themeController.switchTheme(isDarkTheme)
+            settingsRepository.saveDeviceThemeSetting(ThemeSettings(isDarkTheme))
+        }
     }
 }

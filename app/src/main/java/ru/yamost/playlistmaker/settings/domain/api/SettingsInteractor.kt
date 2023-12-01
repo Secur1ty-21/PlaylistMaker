@@ -4,5 +4,6 @@ import ru.yamost.playlistmaker.settings.domain.model.ThemeSettings
 
 interface SettingsInteractor {
     fun getThemeSettings(): ThemeSettings
-    fun updateThemeSettings(themeSettings: ThemeSettings)
+    fun updateUserThemeSettings(themeSettings: ThemeSettings)
+    fun updateDeviceThemeSettings(uiMode: Int)
 }

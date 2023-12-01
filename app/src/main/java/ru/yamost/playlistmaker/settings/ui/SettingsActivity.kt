@@ -1,5 +1,6 @@
 package ru.yamost.playlistmaker.settings.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,8 +30,14 @@ class SettingsActivity : AppCompatActivity() {
             viewModel.openTerms()
         }
         binding.topAppBar.setNavigationOnClickListener { finish() }
-        binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.switchTheme(isChecked)
+        binding.switchTheme.setOnClickListener {
+            viewModel.switchTheme(binding.switchTheme.isChecked)
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        viewModel.onSystemUiModeChangedEvent(newConfig.uiMode)
+        recreate()
     }
 }
