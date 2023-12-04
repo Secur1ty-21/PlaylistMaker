@@ -2,52 +2,65 @@ package ru.yamost.playlistmaker.search.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.yamost.playlistmaker.R
-import ru.yamost.playlistmaker.databinding.ActivitySearchBinding
-import ru.yamost.playlistmaker.player.ui.PlayerActivity
+import ru.yamost.playlistmaker.databinding.FragmentSearchBinding
 import ru.yamost.playlistmaker.search.domain.model.SearchErrorStatus
 import ru.yamost.playlistmaker.search.domain.model.Track
 import ru.yamost.playlistmaker.search.ui.model.SearchScreenState
 
 @SuppressLint("NotifyDataSetChanged")
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
     companion object {
         private const val ITEM_CLICKED_DEBOUNCE_DELAY = 1000L
-        const val TRACK_ITEM_KEY = "Track item"
     }
 
     private lateinit var handler: Handler
-    private lateinit var binding: ActivitySearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding: FragmentSearchBinding get() = _binding!!
     private var isTrackItemClickAllowed = true
     private val viewModel by viewModel<SearchViewModel>()
     private val trackList = mutableListOf<Track>()
     private val trackListAdapter = TrackListAdapter(trackList)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         handler = Handler(Looper.getMainLooper())
         binding.trackList.adapter = trackListAdapter
         setListeners()
-        viewModel.getSearchScreenState().observe(this) {
+        viewModel.getSearchScreenState().observe(viewLifecycleOwner) {
             render(it)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.onNavigateAction()
     }
 
     private fun setListeners() {
@@ -68,7 +81,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchText.setOnFocusChangeListener { _, hasFocus ->
             viewModel.onFocusChangedEvent(hasFocus)
         }
-        binding.topAppBar.setNavigationOnClickListener { finish() }
+        binding.topAppBar.setNavigationOnClickListener { requireActivity().finish() }
         binding.searchText.setOnEditorActionListener { _, actionId, _ ->
             onSearchEditorAction(actionId)
         }
@@ -140,6 +153,10 @@ class SearchActivity : AppCompatActivity() {
                 showError(R.drawable.ic_no_connection, R.string.search_no_connection)
                 binding.refreshButton.isVisible = true
             }
+
+            SearchErrorStatus.CANCELED -> {
+                viewModel.runPreviousSearchRequest()
+            }
         }
     }
 
@@ -166,9 +183,8 @@ class SearchActivity : AppCompatActivity() {
     private fun onClickTrackItem(track: Track) {
         if (debounceTrackItemClick()) {
             viewModel.saveTrackToHistory(track)
-            val intent = Intent(this, PlayerActivity::class.java)
-            intent.putExtra(TRACK_ITEM_KEY, track)
-            startActivity(intent)
+            val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(track)
+            findNavController().navigate(action)
         }
     }
 
@@ -189,7 +205,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun closeKeyboard(view: View) {
-        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        val inputManager =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputManager?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

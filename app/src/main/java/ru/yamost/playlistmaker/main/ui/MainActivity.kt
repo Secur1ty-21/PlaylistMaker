@@ -1,31 +1,28 @@
 package ru.yamost.playlistmaker.main.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.databinding.ActivityMainBinding
-import ru.yamost.playlistmaker.media.ui.MediaActivity
-import ru.yamost.playlistmaker.search.ui.SearchActivity
-import ru.yamost.playlistmaker.settings.ui.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.buttonSearch.setOnClickListener {
-            startImplicitIntent(SearchActivity::class.java)
-        }
-        binding.buttonMedia.setOnClickListener {
-            startImplicitIntent(MediaActivity::class.java)
-        }
-        binding.buttonSettings.setOnClickListener {
-            startImplicitIntent(SettingsActivity::class.java)
-        }
-    }
 
-    private fun <T> startImplicitIntent(cls: Class<T>) {
-        val intent = Intent(this@MainActivity, cls)
-        startActivity(intent)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+        val navController = navHostFragment.navController
+        binding.bottomNavigation.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.playerFragment -> binding.bottomNavigation.isVisible = false
+                else -> binding.bottomNavigation.isVisible = true
+            }
+        }
     }
 }

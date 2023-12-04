@@ -17,4 +17,8 @@
     <attr name="mediaNotFoundTextColor" format="reference" />
     <attr name="playlistMakerButtonTint" format="reference" />
     <attr name="playlistMakerButtonTextColor" format="reference" />
+    <attr name="playlistMakerBottomNavActiveItemColor" format="reference" />
+    <attr name="playlistMakerBottomNavInactiveItemColor" format="reference" />
+    <attr name="playlistMakerBottomNavBackgroundColor" format="reference" />
+    <attr name="playlistMakerBottomNavDividerColor" format="reference" />
 </resources>
