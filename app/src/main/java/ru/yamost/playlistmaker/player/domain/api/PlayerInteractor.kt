@@ -5,6 +5,7 @@ import ru.yamost.playlistmaker.player.domain.model.PlayerState
 interface PlayerInteractor {
     val currentState: PlayerState
     val formatAvailableTrackDuration: String
+    val formatStartTrackTime: String
     fun prepare(trackUrl: String, consumer: PlayerConsumer)
     fun play()
     fun pause()

@@ -1,9 +1,13 @@
 package ru.yamost.playlistmaker.player.ui
 
-import android.os.Handler
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.player.domain.api.PlayerInteractor
 import ru.yamost.playlistmaker.player.domain.model.PlayerState
@@ -12,8 +16,7 @@ import ru.yamost.playlistmaker.search.domain.model.Track
 
 class PlayerViewModel(
     track: Track?,
-    private val interactor: PlayerInteractor,
-    private val handler: Handler
+    private val interactor: PlayerInteractor
 ) : ViewModel() {
     private val pauseDrawableRes = R.drawable.ic_pause_circle
     private val playDrawableRes = R.drawable.ic_play_circle
@@ -28,16 +31,7 @@ class PlayerViewModel(
         PlayerScreenState.PlayedTime(interactor.formatAvailableTrackDuration)
     )
     val playerScreenState: LiveData<PlayerScreenState> get() = _playerScreenState
-    private val updateTimeProgress = object : Runnable {
-        override fun run() {
-            if (interactor.currentState == PlayerState.PLAYING) {
-                _playerScreenState.value = PlayerScreenState.PlayedTime(
-                    playedTime = interactor.formatPlayedTime(),
-                )
-                handler.postDelayed(this, UPDATE_TIME_INTERVAL)
-            }
-        }
-    }
+    private var updateTimeProgressJob: Job? = null
 
     init {
         preparePlayer(track?.previewUrl ?: "")
@@ -57,8 +51,10 @@ class PlayerViewModel(
             }
 
             override fun onTrackEnd() {
+                updateTimeProgressJob?.cancel()
+                Log.v("trackEnd", "trackEnd = ${interactor.formatStartTrackTime}")
                 _playerScreenState.value = PlayerScreenState.PlayButtonState(
-                    drawableRes = playDrawableRes, isEnabled = true, interactor.formatPlayedTime()
+                    drawableRes = playDrawableRes, isEnabled = true, interactor.formatStartTrackTime
                 )
             }
 
@@ -81,20 +77,27 @@ class PlayerViewModel(
         _playerScreenState.value = PlayerScreenState.PlayButtonState(
             drawableRes = pauseDrawableRes,
             isEnabled = true,
-            playedTime = interactor.formatPlayedTime()
+            null
         )
-        handler.postDelayed(updateTimeProgress, UPDATE_TIME_INTERVAL)
+        updateTimeProgressJob = viewModelScope.launch {
+            while (interactor.currentState == PlayerState.PLAYING) {
+                delay(UPDATE_TIME_INTERVAL)
+                _playerScreenState.value = PlayerScreenState.PlayedTime(
+                    playedTime = interactor.formatPlayedTime(),
+                )
+            }
+        }
     }
 
     fun pause() {
         if (interactor.currentState == PlayerState.PLAYING) {
             interactor.pause()
+            updateTimeProgressJob?.cancel()
             _playerScreenState.value = PlayerScreenState.PlayButtonState(
                 drawableRes = playDrawableRes,
                 isEnabled = true,
                 playedTime = interactor.formatPlayedTime()
             )
-            handler.removeCallbacks(updateTimeProgress)
         }
     }
 

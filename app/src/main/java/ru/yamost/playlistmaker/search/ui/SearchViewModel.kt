@@ -1,9 +1,13 @@
 package ru.yamost.playlistmaker.search.ui
 
-import android.os.Handler
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.yamost.playlistmaker.search.domain.api.SearchHistoryInteractor
 import ru.yamost.playlistmaker.search.domain.api.TracksInteractor
 import ru.yamost.playlistmaker.search.domain.model.SearchErrorStatus
@@ -13,25 +17,41 @@ import ru.yamost.playlistmaker.util.Resource
 
 class SearchViewModel(
     private val historyInteractor: SearchHistoryInteractor,
-    private val searchInteractor: TracksInteractor,
-    private val handler: Handler
+    private val searchInteractor: TracksInteractor
 ) : ViewModel() {
-    private var lastSentSearchQuery = ""
+    private var lastRequestWithReceivedResponse = ""
     private var searchQuery = ""
     private var historyTrackList = historyInteractor.getHistory()
     private val searchScreenState = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
-    private val searchRequest = Runnable {
-        sentSearchRequest(searchQuery)
+    private val isClickDebounced = MutableLiveData(true)
+    private var debounceRequest: Job? = null
+
+    fun observeIsClickDebounce(): LiveData<Boolean> = isClickDebounced
+    fun getSearchScreenState(): LiveData<SearchScreenState> = searchScreenState
+
+    fun debounceClick() {
+        viewModelScope.launch {
+            delay(ITEM_CLICKED_DEBOUNCE_DELAY)
+            isClickDebounced.value = true
+        }
     }
 
+
     fun onSearchTextChangedEvent(searchQuery: String) {
-        handler.removeCallbacks(searchRequest)
         this.searchQuery = searchQuery
+        debounceRequest?.cancel()
+        Log.v(SearchFragment::class.java.simpleName, "onSearchTextChangedEvent $searchQuery")
+        searchScreenState.value?.let {
+            if (it is SearchScreenState.Error && it.searchState == SearchErrorStatus.CANCELED) return
+        }
         when {
             searchQuery.isNotEmpty() -> {
-                if (searchQuery != lastSentSearchQuery) {
+                if (searchQuery != lastRequestWithReceivedResponse) {
                     searchScreenState.value = SearchScreenState.Default
-                    handler.postDelayed(searchRequest, SEARCH_DEBOUNCE_DELAY)
+                    debounceRequest = viewModelScope.launch {
+                        delay(SEARCH_DEBOUNCE_DELAY)
+                        sentSearchRequest(searchQuery)
+                    }
                 } else if (searchInteractor.lastFondedTrackList.isNotEmpty()) {
                     searchScreenState.value =
                         SearchScreenState.Content(searchInteractor.lastFondedTrackList)
@@ -54,28 +74,29 @@ class SearchViewModel(
         }
     }
 
-    fun runPreviousSearchRequest() {
-        sentSearchRequest(lastSentSearchQuery, repeatRequest = true)
+    fun runPreviousSearchRequest(searchQuery: String) {
+        debounceRequest = viewModelScope.launch {
+            sentSearchRequest(searchQuery, repeatRequest = true)
+        }
     }
 
-    private fun sentSearchRequest(searchQuery: String, repeatRequest: Boolean = false) {
-        if (searchQuery != lastSentSearchQuery || repeatRequest) {
-            lastSentSearchQuery = searchQuery
+    private suspend fun sentSearchRequest(searchQuery: String, repeatRequest: Boolean = false) {
+        Log.v(SearchFragment::class.java.simpleName, "sentSearchRequest $searchQuery $repeatRequest")
+        if (searchQuery != lastRequestWithReceivedResponse || repeatRequest) {
             searchScreenState.value = SearchScreenState.Loading
-            searchInteractor.searchTracks(text = searchQuery,
-                consumer = object : TracksInteractor.TracksConsumer {
-                    override fun consume(result: Resource<List<Track>, SearchErrorStatus>) {
-                        when (result) {
-                            is Resource.Success -> {
-                                searchScreenState.postValue(SearchScreenState.Content(result.data))
-                            }
-
-                            is Resource.Error -> {
-                                searchScreenState.postValue(SearchScreenState.Error(result.errorStatus))
-                            }
-                        }
+            searchInteractor.searchTracks(text = searchQuery).collect { result ->
+                Log.v(SearchFragment::class.java.simpleName, "resultViewModel $result")
+                lastRequestWithReceivedResponse = searchQuery
+                when (result) {
+                    is Resource.Success -> {
+                        searchScreenState.postValue(SearchScreenState.Content(result.data))
                     }
-                })
+
+                    is Resource.Error -> {
+                        searchScreenState.postValue(SearchScreenState.Error(result.errorStatus))
+                    }
+                }
+            }
         }
     }
 
@@ -97,14 +118,16 @@ class SearchViewModel(
         return searchQuery.isEmpty() && historyInteractor.isHistoryExist()
     }
 
-    fun getSearchScreenState(): LiveData<SearchScreenState> = searchScreenState
-
     fun onNavigateAction() {
-        handler.removeCallbacks(searchRequest)
-        searchInteractor.cancelRequest()
+        debounceRequest?.cancel()
+        if (debounceRequest?.isCancelled == true) {
+            Log.v(SearchFragment::class.java.simpleName, "onNavigation cancel")
+            searchScreenState.value = SearchScreenState.Error(SearchErrorStatus.CANCELED)
+        }
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val ITEM_CLICKED_DEBOUNCE_DELAY = 1000L
     }
 }

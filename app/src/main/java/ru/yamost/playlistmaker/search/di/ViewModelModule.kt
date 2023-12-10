@@ -8,8 +8,7 @@ val searchViewModelModule = module {
     viewModel {
         SearchViewModel(
             historyInteractor = get(),
-            searchInteractor = get(),
-            handler = get()
+            searchInteractor = get()
         )
     }
 }

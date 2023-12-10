@@ -13,8 +13,7 @@ val searchInteractorModule = module {
     }
     single<TracksInteractor> {
         TrackInteractorImpl(
-            repository = get(),
-            executor = get()
+            repository = get()
         )
     }
     factory {

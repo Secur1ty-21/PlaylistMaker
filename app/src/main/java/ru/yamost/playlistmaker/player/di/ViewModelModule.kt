@@ -11,8 +11,7 @@ val playerViewModelModule = module {
     viewModel { (track: Track?) ->
         PlayerViewModel(
             track = track,
-            interactor = get(),
-            handler = get()
+            interactor = get()
         )
     }
     factory {

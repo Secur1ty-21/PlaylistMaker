@@ -15,6 +15,7 @@ class PlayerInteractorImpl(
 
     override val formatAvailableTrackDuration: String =
         formatter.format(MAX_AVAILABLE_TRACK_DURATION)
+    override val formatStartTrackTime: String = formatter.format(0)
     override val currentState: PlayerState
         get() = playerController.currentState
 
