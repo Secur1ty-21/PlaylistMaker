@@ -3,19 +3,10 @@ package ru.yamost.playlistmaker.player.domain.impl
 import ru.yamost.playlistmaker.player.domain.api.PlayerController
 import ru.yamost.playlistmaker.player.domain.api.PlayerInteractor
 import ru.yamost.playlistmaker.player.domain.model.PlayerState
-import java.text.SimpleDateFormat
 
 class PlayerInteractorImpl(
-    private val formatter: SimpleDateFormat,
     private val playerController: PlayerController,
 ) : PlayerInteractor {
-    companion object {
-        private const val MAX_AVAILABLE_TRACK_DURATION = 30_000L
-    }
-
-    override val formatAvailableTrackDuration: String =
-        formatter.format(MAX_AVAILABLE_TRACK_DURATION)
-    override val formatStartTrackTime: String = formatter.format(0)
     override val currentState: PlayerState
         get() = playerController.currentState
 
@@ -40,7 +31,7 @@ class PlayerInteractorImpl(
         playerController.release()
     }
 
-    override fun formatPlayedTime(): String {
-        return formatter.format(playerController.currentPosition)
+    override fun playedTime(): Int {
+        return playerController.currentPosition
     }
 }
