@@ -9,10 +9,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.yamost.playlistmaker.databinding.FragmentPlaylistBinding
 
 class PlaylistFragment : Fragment() {
-    companion object {
-        fun newInstance() = PlaylistFragment()
-    }
-
     private val viewModel by viewModel<PlaylistViewModel>()
     private var _binding: FragmentPlaylistBinding? = null
     private val binding: FragmentPlaylistBinding get() = _binding!!
@@ -33,5 +29,9 @@ class PlaylistFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        fun newInstance() = PlaylistFragment()
     }
 }

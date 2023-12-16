@@ -13,11 +13,6 @@ class SharedPrefSearchHistoryRepository(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson
 ) : SearchHistoryRepository {
-    companion object {
-        private const val SEARCH_HISTORY_KEY = "searchHistory"
-        private const val MAX_TRACKS_IN_SEARCH_HISTORY = 10
-    }
-
     private var trackList = ArrayList<TrackStorageDto>()
     private val typeOfArrayList = object : TypeToken<ArrayList<TrackStorageDto>>() {}.type
 
@@ -61,4 +56,9 @@ class SharedPrefSearchHistoryRepository(
     }
 
     override fun isNotEmpty() = sharedPreferences.contains(SEARCH_HISTORY_KEY)
+
+    companion object {
+        private const val SEARCH_HISTORY_KEY = "searchHistory"
+        private const val MAX_TRACKS_IN_SEARCH_HISTORY = 10
+    }
 }

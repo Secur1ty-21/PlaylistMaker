@@ -9,10 +9,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.yamost.playlistmaker.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment() {
-    companion object {
-        fun newInstance() = FavoritesFragment()
-    }
-
     private var _binding: FragmentFavoritesBinding? = null
     private val binding: FragmentFavoritesBinding get() = _binding!!
     private val viewModel by viewModel<FavoritesViewModel>()
@@ -33,5 +29,9 @@ class FavoritesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        fun newInstance() = FavoritesFragment()
     }
 }

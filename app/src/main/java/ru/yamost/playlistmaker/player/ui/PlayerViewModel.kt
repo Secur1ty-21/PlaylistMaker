@@ -1,19 +1,23 @@
 package ru.yamost.playlistmaker.player.ui
 
-import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.player.domain.api.PlayerInteractor
 import ru.yamost.playlistmaker.player.domain.model.PlayerState
 import ru.yamost.playlistmaker.player.ui.model.PlayerScreenState
 import ru.yamost.playlistmaker.search.domain.model.Track
+import java.text.SimpleDateFormat
 
 class PlayerViewModel(
     track: Track?,
     private val interactor: PlayerInteractor,
-    private val handler: Handler
+    private val formatter: SimpleDateFormat
 ) : ViewModel() {
     private val pauseDrawableRes = R.drawable.ic_pause_circle
     private val playDrawableRes = R.drawable.ic_play_circle
@@ -25,19 +29,10 @@ class PlayerViewModel(
     )
     val trackInfoState: LiveData<Track?> get() = _trackInfoState
     private val _playerScreenState = MutableLiveData<PlayerScreenState>(
-        PlayerScreenState.PlayedTime(interactor.formatAvailableTrackDuration)
+        PlayerScreenState.PlayedTime(formatter.format(PlayerInteractor.MAX_AVAILABLE_TRACK_DURATION))
     )
     val playerScreenState: LiveData<PlayerScreenState> get() = _playerScreenState
-    private val updateTimeProgress = object : Runnable {
-        override fun run() {
-            if (interactor.currentState == PlayerState.PLAYING) {
-                _playerScreenState.value = PlayerScreenState.PlayedTime(
-                    playedTime = interactor.formatPlayedTime(),
-                )
-                handler.postDelayed(this, UPDATE_TIME_INTERVAL)
-            }
-        }
-    }
+    private var updateTimeProgressJob: Job? = null
 
     init {
         preparePlayer(track?.previewUrl ?: "")
@@ -52,13 +47,16 @@ class PlayerViewModel(
                 _playerScreenState.value = PlayerScreenState.PlayButtonState(
                     drawableRes = playDrawableRes,
                     isEnabled = true,
-                    playedTime = interactor.formatAvailableTrackDuration
+                    playedTime = formatter.format(PlayerInteractor.MAX_AVAILABLE_TRACK_DURATION)
                 )
             }
 
             override fun onTrackEnd() {
+                updateTimeProgressJob?.cancel()
                 _playerScreenState.value = PlayerScreenState.PlayButtonState(
-                    drawableRes = playDrawableRes, isEnabled = true, interactor.formatPlayedTime()
+                    drawableRes = playDrawableRes,
+                    isEnabled = true,
+                    playedTime = formatter.format(PlayerInteractor.START_TRACK_TIME)
                 )
             }
 
@@ -81,20 +79,27 @@ class PlayerViewModel(
         _playerScreenState.value = PlayerScreenState.PlayButtonState(
             drawableRes = pauseDrawableRes,
             isEnabled = true,
-            playedTime = interactor.formatPlayedTime()
+            null
         )
-        handler.postDelayed(updateTimeProgress, UPDATE_TIME_INTERVAL)
+        updateTimeProgressJob = viewModelScope.launch {
+            while (interactor.currentState == PlayerState.PLAYING) {
+                delay(UPDATE_TIME_INTERVAL)
+                _playerScreenState.value = PlayerScreenState.PlayedTime(
+                    playedTime = formatter.format(interactor.playedTime()),
+                )
+            }
+        }
     }
 
     fun pause() {
         if (interactor.currentState == PlayerState.PLAYING) {
             interactor.pause()
+            updateTimeProgressJob?.cancel()
             _playerScreenState.value = PlayerScreenState.PlayButtonState(
                 drawableRes = playDrawableRes,
                 isEnabled = true,
-                playedTime = interactor.formatPlayedTime()
+                playedTime = formatter.format(interactor.playedTime())
             )
-            handler.removeCallbacks(updateTimeProgress)
         }
     }
 

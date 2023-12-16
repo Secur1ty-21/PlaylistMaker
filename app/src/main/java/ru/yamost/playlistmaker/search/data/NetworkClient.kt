@@ -4,6 +4,9 @@ import ru.yamost.playlistmaker.search.data.network.dto.Response
 import ru.yamost.playlistmaker.search.data.network.dto.TrackSearchRequest
 
 interface NetworkClient {
-    fun doSearchTrackRequest(dto: TrackSearchRequest): Response
-    fun cancelRequest()
+    suspend fun doSearchTrackRequest(dto: TrackSearchRequest): Response
+
+    companion object {
+        const val CANCEL_REQUEST_CODE = -500
+    }
 }

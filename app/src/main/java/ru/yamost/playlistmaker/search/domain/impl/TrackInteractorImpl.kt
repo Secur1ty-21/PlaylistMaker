@@ -1,43 +1,27 @@
 package ru.yamost.playlistmaker.search.domain.impl
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import ru.yamost.playlistmaker.search.domain.api.TrackRepository
 import ru.yamost.playlistmaker.search.domain.api.TracksInteractor
 import ru.yamost.playlistmaker.search.domain.model.SearchErrorStatus
 import ru.yamost.playlistmaker.search.domain.model.Track
 import ru.yamost.playlistmaker.util.Resource
-import java.io.IOException
-import java.util.concurrent.ExecutorService
 
 class TrackInteractorImpl(
     private val repository: TrackRepository,
-    private val executor: ExecutorService
 ) : TracksInteractor {
     private var _lastFoundedTrackList = emptyList<Track>()
     override val lastFondedTrackList: List<Track>
         get() = _lastFoundedTrackList
 
-    override fun searchTracks(text: String, consumer: TracksInteractor.TracksConsumer) {
-        executor.execute {
-            try {
-                val result = repository.searchTracks(searchQuery = text)
-                _lastFoundedTrackList = when (result) {
-                    is Resource.Error -> emptyList()
-                    is Resource.Success -> result.data
-                }
-                consumer.consume(result)
-            } catch (e: IOException) {
-                e.printStackTrace()
-                _lastFoundedTrackList = emptyList()
-                consumer.consume(Resource.Error(SearchErrorStatus.CANCELED, null))
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _lastFoundedTrackList = emptyList()
-                consumer.consume(Resource.Error(SearchErrorStatus.CONNECTION_ERROR, null))
+    override fun searchTracks(text: String): Flow<Resource<List<Track>, SearchErrorStatus>> {
+        return repository.searchTracks(text).map { result ->
+            _lastFoundedTrackList = when (result) {
+                is Resource.Error -> emptyList()
+                is Resource.Success -> result.data
             }
+            result
         }
-    }
-
-    override fun cancelRequest() {
-        repository.cancelSearchRequest()
     }
 }

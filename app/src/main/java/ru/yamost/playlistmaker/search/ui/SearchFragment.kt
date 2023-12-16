@@ -3,10 +3,9 @@ package ru.yamost.playlistmaker.search.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,11 +26,6 @@ import ru.yamost.playlistmaker.search.ui.model.SearchScreenState
 
 @SuppressLint("NotifyDataSetChanged")
 class SearchFragment : Fragment() {
-    companion object {
-        private const val ITEM_CLICKED_DEBOUNCE_DELAY = 1000L
-    }
-
-    private lateinit var handler: Handler
     private var _binding: FragmentSearchBinding? = null
     private val binding: FragmentSearchBinding get() = _binding!!
     private var isTrackItemClickAllowed = true
@@ -50,16 +44,20 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        handler = Handler(Looper.getMainLooper())
         binding.trackList.adapter = trackListAdapter
         setListeners()
+        viewModel.observeIsClickDebounce().observe(viewLifecycleOwner) {
+            isTrackItemClickAllowed = it
+        }
         viewModel.getSearchScreenState().observe(viewLifecycleOwner) {
+            Log.v(SearchFragment::class.java.simpleName, "state = $it")
             render(it)
         }
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
+        binding.searchText.clearFocus()
         viewModel.onNavigateAction()
     }
 
@@ -104,10 +102,12 @@ class SearchFragment : Fragment() {
             }
 
             is SearchScreenState.Content -> {
+                Log.v(SearchFragment::class.java.simpleName, "content")
                 updateTrackList(state.trackList)
             }
 
             is SearchScreenState.Error -> {
+                Log.v(SearchFragment::class.java.simpleName, "error")
                 showError(state.searchState)
             }
 
@@ -140,7 +140,7 @@ class SearchFragment : Fragment() {
 
     private fun onClickRefreshButton() {
         binding.blockError.isVisible = false
-        viewModel.runPreviousSearchRequest()
+        viewModel.runPreviousSearchRequest(binding.searchText.text.toString())
     }
 
     private fun showError(searchErrorStatus: SearchErrorStatus) {
@@ -155,7 +155,7 @@ class SearchFragment : Fragment() {
             }
 
             SearchErrorStatus.CANCELED -> {
-                viewModel.runPreviousSearchRequest()
+                viewModel.runPreviousSearchRequest(binding.searchText.text.toString())
             }
         }
     }
@@ -188,14 +188,14 @@ class SearchFragment : Fragment() {
         }
     }
 
+
     private fun debounceTrackItemClick(): Boolean {
         val current = isTrackItemClickAllowed
         if (current) {
+            viewModel.debounceClick()
             isTrackItemClickAllowed = false
-            handler.postDelayed({ isTrackItemClickAllowed = true }, ITEM_CLICKED_DEBOUNCE_DELAY)
-            return true
         }
-        return false
+        return current
     }
 
     private fun updateTrackList(tracks: List<Track>) {
