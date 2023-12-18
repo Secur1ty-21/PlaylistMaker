@@ -102,11 +102,12 @@
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/playerBackgroundIconTint"
             android:contentDescription="@string/player_add_to_favorite"
+            app:tint="#00FFFFFF"
+            android:tintMode="add"
             app:layout_constraintEnd_toEndOf="@id/marginEnd"
             app:layout_constraintTop_toTopOf="@id/addToPlaylistButton"
             app:rippleColor="@color/yp_red"
-            app:srcCompat="@drawable/ic_add_favorite"
-            app:tint="@color/yp_white" />
+            app:srcCompat="@drawable/ic_favorite_inactive" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/playButton"

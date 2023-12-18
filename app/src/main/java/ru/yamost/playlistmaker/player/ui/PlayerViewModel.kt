@@ -1,9 +1,11 @@
 package ru.yamost.playlistmaker.player.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -15,7 +17,7 @@ import ru.yamost.playlistmaker.search.domain.model.Track
 import java.text.SimpleDateFormat
 
 class PlayerViewModel(
-    track: Track?,
+    private val track: Track?,
     private val interactor: PlayerInteractor,
     private val formatter: SimpleDateFormat
 ) : ViewModel() {
@@ -32,9 +34,18 @@ class PlayerViewModel(
         PlayerScreenState.PlayedTime(formatter.format(PlayerInteractor.MAX_AVAILABLE_TRACK_DURATION))
     )
     val playerScreenState: LiveData<PlayerScreenState> get() = _playerScreenState
+    private val _isFavorite = MutableLiveData(false)
+    val isFavorite: LiveData<Boolean> = _isFavorite
     private var updateTimeProgressJob: Job? = null
 
     init {
+        track?.let {
+            viewModelScope.launch(Dispatchers.IO) {
+                interactor.isTrackInFavorite(track).collect {
+                    _isFavorite.postValue(it)
+                }
+            }
+        }
         preparePlayer(track?.previewUrl ?: "")
     }
 
@@ -47,7 +58,7 @@ class PlayerViewModel(
                 _playerScreenState.value = PlayerScreenState.PlayButtonState(
                     drawableRes = playDrawableRes,
                     isEnabled = true,
-                    playedTime = formatter.format(PlayerInteractor.MAX_AVAILABLE_TRACK_DURATION)
+                    playedTime = formatter.format(PlayerInteractor.MAX_AVAILABLE_TRACK_DURATION),
                 )
             }
 
@@ -85,7 +96,7 @@ class PlayerViewModel(
             while (interactor.currentState == PlayerState.PLAYING) {
                 delay(UPDATE_TIME_INTERVAL)
                 _playerScreenState.value = PlayerScreenState.PlayedTime(
-                    playedTime = formatter.format(interactor.playedTime()),
+                    playedTime = formatter.format(interactor.playedTime())
                 )
             }
         }
@@ -100,6 +111,22 @@ class PlayerViewModel(
                 isEnabled = true,
                 playedTime = formatter.format(interactor.playedTime())
             )
+        }
+    }
+
+    fun onClickFavoriteBtn() {
+        track?.let {
+            viewModelScope.launch(Dispatchers.IO) {
+                if (isFavorite.value == true) {
+                    interactor.deleteTrackFromFavorite(it)
+                    Log.v("PlayerViewModel", "isFavorite = false")
+                    _isFavorite.postValue(false)
+                } else {
+                    interactor.addTrackToFavorite(it)
+                    Log.v("PlayerViewModel", "isFavorite = true")
+                    _isFavorite.postValue(true)
+                }
+            }
         }
     }
 

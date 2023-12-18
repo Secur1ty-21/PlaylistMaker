@@ -36,7 +36,6 @@ class SearchViewModel(
         }
     }
 
-
     fun onSearchTextChangedEvent(searchQuery: String) {
         this.searchQuery = searchQuery
         debounceRequest?.cancel()

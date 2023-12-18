@@ -1,34 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/screenBackgroundColor"
-    android:orientation="vertical">
+    android:background="?attr/screenBackgroundColor">
 
-    <LinearLayout
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_marginTop="@dimen/contentPaddingS"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        tools:listitem="@layout/item_track" />
 
-        <ImageView
-            android:id="@+id/img_media_empty"
-            android:layout_width="wrap_content"
+    <ScrollView
+        android:id="@+id/empty_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="106dp"
-            android:contentDescription="@string/search_not_found"
-            android:src="@drawable/ic_not_found" />
+            android:orientation="vertical">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/lbl_media_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/contentPaddingS"
-            android:fontFamily="@font/ys_display_medium"
-            android:text="@string/favorites_media_empty"
-            android:textColor="?attr/mediaNotFoundTextColor"
-            android:textSize="@dimen/text_XL" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/img_media_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="106dp"
+                android:contentDescription="@string/search_not_found"
+                android:src="@drawable/ic_not_found" />
 
-</ScrollView>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/lbl_media_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/contentPaddingS"
+                android:fontFamily="@font/ys_display_medium"
+                android:text="@string/favorites_media_empty"
+                android:textColor="?attr/mediaNotFoundTextColor"
+                android:textSize="@dimen/text_XL" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

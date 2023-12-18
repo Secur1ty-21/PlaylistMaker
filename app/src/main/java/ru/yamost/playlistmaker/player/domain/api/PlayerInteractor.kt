@@ -1,6 +1,8 @@
 package ru.yamost.playlistmaker.player.domain.api
 
+import kotlinx.coroutines.flow.Flow
 import ru.yamost.playlistmaker.player.domain.model.PlayerState
+import ru.yamost.playlistmaker.search.domain.model.Track
 
 interface PlayerInteractor {
     val currentState: PlayerState
@@ -9,6 +11,9 @@ interface PlayerInteractor {
     fun pause()
     fun clearMemory()
     fun playedTime(): Int
+    suspend fun addTrackToFavorite(track: Track)
+    suspend fun deleteTrackFromFavorite(track: Track)
+    suspend fun isTrackInFavorite(track: Track): Flow<Boolean>
     interface PlayerConsumer {
         fun onReadyForUse()
         fun onTrackEnd()

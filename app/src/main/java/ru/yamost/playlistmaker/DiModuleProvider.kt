@@ -1,5 +1,8 @@
 package ru.yamost.playlistmaker
 
+import ru.yamost.playlistmaker.favorites.di.favoriteDataModule
+import ru.yamost.playlistmaker.favorites.di.favoriteInteractorModule
+import ru.yamost.playlistmaker.favorites.di.favoriteRepositoryModule
 import ru.yamost.playlistmaker.favorites.di.favoritesViewModelModule
 import ru.yamost.playlistmaker.player.di.playerDataModule
 import ru.yamost.playlistmaker.player.di.playerInteractorModule
@@ -39,6 +42,9 @@ object DiModuleProvider {
         sharingInteractorModule
     )
     val favoritesModules = listOf(
+        favoriteDataModule,
+        favoriteRepositoryModule,
+        favoriteInteractorModule,
         favoritesViewModelModule
     )
     val playlistModules = listOf(
