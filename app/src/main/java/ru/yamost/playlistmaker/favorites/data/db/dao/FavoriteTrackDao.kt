@@ -12,6 +12,9 @@ interface FavoriteTrackDao {
     @Query("SELECT * FROM favorite_track_table ORDER BY createdDate DESC")
     fun getTrackList(): List<TrackEntity>
 
+    @Query("SELECT id FROM favorite_track_table")
+    fun getTrackIdList(): List<Int>
+
     @Insert(entity = TrackEntity::class, onConflict = OnConflictStrategy.REPLACE)
     fun saveTrack(trackEntity: TrackEntity)
 

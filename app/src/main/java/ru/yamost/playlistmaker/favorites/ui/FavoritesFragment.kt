@@ -11,7 +11,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.yamost.playlistmaker.databinding.FragmentFavoritesBinding
 import ru.yamost.playlistmaker.media.ui.MediaFragmentDirections
 import ru.yamost.playlistmaker.search.domain.model.Track
-import ru.yamost.playlistmaker.search.ui.TrackListAdapter
+import ru.yamost.playlistmaker.core.ui.TrackListAdapter
 
 class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null

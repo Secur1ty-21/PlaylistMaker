@@ -33,7 +33,8 @@ class TrackMapper {
                 releaseDate = releaseDate,
                 primaryGenreName = primaryGenreName,
                 country = country,
-                previewUrl = previewUrl
+                previewUrl = previewUrl,
+                isFavorite = true
             )
         }
     }

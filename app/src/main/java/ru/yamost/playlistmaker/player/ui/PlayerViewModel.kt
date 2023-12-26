@@ -1,6 +1,5 @@
 package ru.yamost.playlistmaker.player.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,15 +33,19 @@ class PlayerViewModel(
         PlayerScreenState.PlayedTime(formatter.format(PlayerInteractor.MAX_AVAILABLE_TRACK_DURATION))
     )
     val playerScreenState: LiveData<PlayerScreenState> get() = _playerScreenState
-    private val _isFavorite = MutableLiveData(false)
+    private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean> = _isFavorite
     private var updateTimeProgressJob: Job? = null
 
     init {
         track?.let {
             viewModelScope.launch(Dispatchers.IO) {
-                interactor.isTrackInFavorite(track).collect {
-                    _isFavorite.postValue(it)
+                if (it.isFavorite) {
+                    _isFavorite.postValue(true)
+                } else {
+                    interactor.isTrackInFavorite(it).collect {
+                        _isFavorite.postValue(it)
+                    }
                 }
             }
         }
@@ -119,11 +122,9 @@ class PlayerViewModel(
             viewModelScope.launch(Dispatchers.IO) {
                 if (isFavorite.value == true) {
                     interactor.deleteTrackFromFavorite(it)
-                    Log.v("PlayerViewModel", "isFavorite = false")
                     _isFavorite.postValue(false)
                 } else {
                     interactor.addTrackToFavorite(it)
-                    Log.v("PlayerViewModel", "isFavorite = true")
                     _isFavorite.postValue(true)
                 }
             }

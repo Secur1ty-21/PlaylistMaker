@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.search.ui
+package ru.yamost.playlistmaker.core.ui
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
