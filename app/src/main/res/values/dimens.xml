@@ -18,7 +18,8 @@
     <dimen name="text_XS">11sp</dimen>
     <!-- \Text -->
     <dimen name="margin_from_toolbar">24dp</dimen>
-    <dimen name="cornerRadiusXS">2dp</dimen>
+    <dimen name="cornerRadiusXXS">2dp</dimen>
+    <dimen name="cornerRadiusXS">4dp</dimen>
     <dimen name="cornerRadiusS">8dp</dimen>
     <dimen name="cornerRadiusXL">54dp</dimen>
     <dimen name="contentPaddingM">24dp</dimen>

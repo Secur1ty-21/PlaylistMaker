@@ -23,6 +23,7 @@ class App : Application() {
             modules(DiModuleProvider.sharingModules)
             modules(DiModuleProvider.favoritesModules)
             modules(DiModuleProvider.playlistModules)
+            modules(DiModuleProvider.createModules)
         }
         val isDarkTheme = themeController.isSystemInDarkMode(
             resources.configuration.uiMode
@@ -43,10 +44,4 @@ class App : Application() {
             themeController.switchTheme(isDarkTheme)
         }
     }
-
-    /*private fun isSystemInNightMode(): Boolean {
-        val currentUiMode = resources.configuration.uiMode
-        val nightMask = Configuration.UI_MODE_NIGHT_MASK
-        return currentUiMode and nightMask == Configuration.UI_MODE_NIGHT_YES
-    }*/
 }

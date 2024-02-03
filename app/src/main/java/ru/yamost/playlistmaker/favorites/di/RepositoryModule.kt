@@ -8,7 +8,7 @@ import ru.yamost.playlistmaker.favorites.domain.api.FavoriteTrackRepository
 val favoriteRepositoryModule = module {
     single<FavoriteTrackRepository> {
         FavoriteTrackRepositoryImpl(
-            favoriteTrackDatabase = get(),
+            appDatabase = get(),
             trackMapper = get()
         )
     }

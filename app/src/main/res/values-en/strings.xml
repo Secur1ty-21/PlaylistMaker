@@ -22,6 +22,16 @@
     <string name="player_year">Year</string>
     <string name="player_genre_name">Genre</string>
     <string name="player_country">Country</string>
+    <string name="create_toolbar_title">New playlist</string>
+    <string name="create_accepted_dialog_title">Finish creating a playlist?</string>
+    <string name="create_accepted_dialog_msg">All unsaved data will be lost</string>
+    <string name="create_accepted_dialog_pos_btn">Finish</string>
+    <string name="create_accepted_dialog_neg_btn">Cancel</string>
+    <string name="create_playlist_created_msg">The playlist %s has been created</string>
+    <plurals name="playlist_item_size">
+        <item quantity="one">track</item>
+        <item quantity="other">tracks</item>
+    </plurals>
     <!--Support assistant-->
     <string name="button_back_description">Back</string>
     <string name="button_clear_description">Clear</string>
@@ -35,4 +45,7 @@
     <string name="btn_create_playlist">New playlist</string>
     <string name="media_tab_favorites">Favorites tracks</string>
     <string name="media_tab_playlists">Playlists</string>
+    <string name="create_hint_description">Description</string>
+    <string name="create_btn_create">Create</string>
+    <string name="create_hint_name">Title*</string>
 </resources>
