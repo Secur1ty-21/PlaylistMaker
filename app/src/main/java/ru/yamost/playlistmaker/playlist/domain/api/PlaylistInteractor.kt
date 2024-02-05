@@ -8,5 +8,6 @@ import ru.yamost.playlistmaker.search.domain.model.Track
 interface PlaylistInteractor {
     fun getPlaylistList(): Flow<List<Playlist>>
     suspend fun createPlaylist(name: String, description: String, uri: Uri?)
-    fun addTrackToPlaylist(track: Track)
+    fun addTrackToPlaylist(track: Track, playlist: Playlist)
+    fun isTrackInPlaylist(track: Track, playlist: Playlist): Boolean
 }

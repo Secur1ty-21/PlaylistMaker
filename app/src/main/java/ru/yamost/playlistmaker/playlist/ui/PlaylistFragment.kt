@@ -1,7 +1,6 @@
 package ru.yamost.playlistmaker.playlist.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,16 +36,20 @@ class PlaylistFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.rvPlaylist.adapter = playlistAdapter
-        binding.rvPlaylist.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
-        binding.rvPlaylist.addItemDecoration(PlaylistItemDecorator(
-            resources.getDimensionPixelSize(R.dimen.playlist_item_between_space)
-        ))
+        binding.rvPlaylist.layoutManager =
+            GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+        binding.rvPlaylist.addItemDecoration(
+            PlaylistItemDecorator(
+                resources.getDimensionPixelSize(R.dimen.playlist_item_between_space)
+            )
+        )
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
     }
 
     private fun render(state: PlaylistScreenState) {
+        binding.progress.hide()
         when (state) {
             is PlaylistScreenState.Content -> {
                 binding.imgNotCreated.visibility = View.GONE
@@ -64,8 +67,8 @@ class PlaylistFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.v(PlaylistFragment::class.java.simpleName, "onResume")
         viewModel.updatePlaylistList()
+        binding.progress.show()
     }
 
     override fun onDestroyView() {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,13 +8,13 @@
     android:paddingHorizontal="13dp"
     android:paddingVertical="@dimen/contentPaddingXS">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/playlist_cover"
         android:layout_width="@dimen/cover_s"
         android:layout_height="@dimen/cover_s"
-        android:background="@drawable/shape_playlist_small_cover"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
+        app:shapeAppearance="@style/RoundedCoverS"
         tools:src="@drawable/ic_track_placeholder" />
 
     <LinearLayout

@@ -15,7 +15,11 @@ class PlaylistInteractorImpl(
         playlistRepository.addPlaylistToDatabase(uri = uri, description = description, name = name)
     }
 
-    override fun addTrackToPlaylist(track: Track) {
+    override fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+        playlistRepository.addTrackToPlaylist(track, playlist)
+    }
 
+    override fun isTrackInPlaylist(track: Track, playlist: Playlist): Boolean {
+        return playlistRepository.isTrackInPlaylist(track, playlist)
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/scroll_container"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/screenBackgroundColor"
     android:orientation="vertical">
@@ -52,5 +52,15 @@
             android:text="@string/playlist_not_created"
             android:textColor="?attr/mediaNotFoundTextColor"
             android:visibility="gone" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:indicatorColor="@color/yp_blue"
+            tools:visibility="visible" />
     </LinearLayout>
 </ScrollView>

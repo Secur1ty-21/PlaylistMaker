@@ -4,12 +4,12 @@ import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Log
 import androidx.core.net.toUri
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.yamost.playlistmaker.playlist.data.db.dao.PlaylistDao
 import ru.yamost.playlistmaker.playlist.data.db.entity.PlaylistEntity
+import ru.yamost.playlistmaker.playlist.data.db.entity.PlaylistTrackEntity
 import ru.yamost.playlistmaker.playlist.domain.api.PlaylistRepository
 import ru.yamost.playlistmaker.playlist.domain.model.Playlist
 import ru.yamost.playlistmaker.search.domain.model.Track
@@ -19,6 +19,7 @@ import java.util.Date
 class PlaylistRepositoryImpl(
     private val playlistDao: PlaylistDao,
     private val playlistMapper: PlaylistMapper,
+    private val trackMapper: TrackMapper,
     private val internalDir: File,
     private val contentResolver: ContentResolver
 ) : PlaylistRepository {
@@ -33,10 +34,7 @@ class PlaylistRepositoryImpl(
     }
 
     override suspend fun addPlaylistToDatabase(name: String, description: String, uri: Uri?) {
-        Log.v(Playlist::class.java.simpleName, "uri = $uri")
-        Log.v(Playlist::class.java.simpleName, "uri_path = ${uri?.path}")
-        Log.v(Playlist::class.java.simpleName, "uri_some = ${uri?.encodedPath}")
-        val internalUri = saveFile(uri)
+        val internalUri = savePhotoToInternalDir(uri)
         playlistDao.createPlaylist(
             PlaylistEntity(
                 name = name,
@@ -46,7 +44,7 @@ class PlaylistRepositoryImpl(
         )
     }
 
-    private fun saveFile(uriFile: Uri?): Uri? {
+    private fun savePhotoToInternalDir(uriFile: Uri?): Uri? {
         return if (uriFile == null) {
             null
         } else {
@@ -61,7 +59,14 @@ class PlaylistRepositoryImpl(
         }
     }
 
-    override fun addTrackToPlaylist(track: Track) {
+    override fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+        val playlistTrackEntity = PlaylistTrackEntity(playlistId = playlist.id, trackId = track.id)
+        val trackEntity = trackMapper.mapToEntity(track)
+        playlistDao.addTrackToPlaylist(playlistTrackEntity, trackEntity)
+        playlistDao.updatePlaylistSize(newSize = playlist.size + 1, playlistId = playlist.id)
+    }
 
+    override fun isTrackInPlaylist(track: Track, playlist: Playlist): Boolean {
+        return playlistDao.isTrackExistInPlaylist(playlistId = playlist.id, trackId = track.id)
     }
 }

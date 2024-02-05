@@ -3,7 +3,7 @@ package ru.yamost.playlistmaker.favorites.data
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.yamost.playlistmaker.core.data.db.AppDatabase
-import ru.yamost.playlistmaker.favorites.data.db.entity.TrackEntity
+import ru.yamost.playlistmaker.favorites.data.db.entity.FavoriteTrackEntity
 import ru.yamost.playlistmaker.favorites.domain.api.FavoriteTrackRepository
 import ru.yamost.playlistmaker.search.domain.model.Track
 
@@ -26,7 +26,7 @@ class FavoriteTrackRepositoryImpl(
         }
     }
 
-    private fun mapToDomain(trackList: List<TrackEntity>): List<Track> {
+    private fun mapToDomain(trackList: List<FavoriteTrackEntity>): List<Track> {
         return trackList.map { trackMapper.mapToDomain(it) }
     }
 

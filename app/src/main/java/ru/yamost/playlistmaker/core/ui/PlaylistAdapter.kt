@@ -15,9 +15,30 @@ class PlaylistAdapter(
     private val playlistList = mutableListOf<Playlist>()
 
     fun updateContent(data: List<Playlist>) {
-        playlistList.clear()
-        playlistList.addAll(data)
-        notifyDataSetChanged()
+        val oldSize = playlistList.size
+        if (data.size == oldSize || data.size < oldSize) {
+            for (i in data.indices) {
+                if (data[i] != playlistList[i]) {
+                    playlistList[i] = data[i]
+                    notifyItemChanged(i)
+                }
+            }
+            if (data.size < oldSize) {
+                for (i in data.size until oldSize) {
+                    playlistList.removeLast()
+                }
+                notifyItemRangeRemoved(data.size, oldSize - data.size)
+            }
+        } else {
+            for (i in playlistList.indices) {
+                if (data[i] != playlistList[i]) {
+                    playlistList[i] = data[i]
+                    notifyItemChanged(i)
+                }
+            }
+            playlistList.addAll(data.slice(oldSize until data.size))
+            notifyItemRangeInserted(oldSize, data.size - oldSize)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -31,7 +52,7 @@ class PlaylistAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         clickListener?.let {
             holder.itemView.setOnClickListener { _ ->
-                it.onItemClick(id = playlistList[position].id)
+                it.onItemClick(playlist = playlistList[position])
             }
         }
         when (holder) {
@@ -49,5 +70,5 @@ class PlaylistAdapter(
 }
 
 fun interface PlaylistClickListener {
-    fun onItemClick(id: Int)
+    fun onItemClick(playlist: Playlist)
 }

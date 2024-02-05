@@ -49,4 +49,6 @@
     <string name="create_btn_create">Create</string>
     <string name="create_hint_name">Title*</string>
     <string name="player_lbl_add_to_playlist">Add to Playlist</string>
+    <string name="player_msg_track_exist_in_playlist">The track has already been added to the playlist %s</string>
+    <string name="player_msg_track_added">Added to the playlist %s</string>
 </resources>
