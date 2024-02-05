@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.player.ui.model
+package ru.yamost.playlistmaker.player.presentation.model
 
 import androidx.annotation.DrawableRes
 

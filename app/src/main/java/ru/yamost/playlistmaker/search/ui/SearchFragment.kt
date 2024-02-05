@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.yamost.playlistmaker.R
+import ru.yamost.playlistmaker.core.ui.TrackListAdapter
 import ru.yamost.playlistmaker.databinding.FragmentSearchBinding
 import ru.yamost.playlistmaker.search.domain.model.SearchErrorStatus
 import ru.yamost.playlistmaker.search.domain.model.Track

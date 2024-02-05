@@ -6,6 +6,8 @@ import ru.yamost.playlistmaker.favorites.ui.FavoritesViewModel
 
 val favoritesViewModelModule = module {
     viewModel {
-        FavoritesViewModel()
+        FavoritesViewModel(
+            favoriteTrackInteractor = get()
+        )
     }
 }
