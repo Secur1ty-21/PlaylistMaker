@@ -1,13 +1,15 @@
-package ru.yamost.playlistmaker.favorites.data.db.entity
+package ru.yamost.playlistmaker.playlist.data.db.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 
-@Entity(tableName = "favorite_track_table")
+@Entity(tableName = "track_table")
 data class TrackEntity(
     @PrimaryKey(autoGenerate = false)
-    val id: Int,
+    @ColumnInfo(name = "id_track")
+    val idTrack: Int,
     val trackName: String,
     val artistName: String,
     val trackTime: String,

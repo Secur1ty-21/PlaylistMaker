@@ -1,5 +1,6 @@
-package ru.yamost.playlistmaker.player.ui
+package ru.yamost.playlistmaker.player.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,13 +12,17 @@ import kotlinx.coroutines.launch
 import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.player.domain.api.PlayerInteractor
 import ru.yamost.playlistmaker.player.domain.model.PlayerState
-import ru.yamost.playlistmaker.player.ui.model.PlayerScreenState
+import ru.yamost.playlistmaker.player.presentation.model.PlayerAction
+import ru.yamost.playlistmaker.player.presentation.model.PlayerScreenState
+import ru.yamost.playlistmaker.playlist.domain.api.PlaylistInteractor
+import ru.yamost.playlistmaker.playlist.domain.model.Playlist
 import ru.yamost.playlistmaker.search.domain.model.Track
 import java.text.SimpleDateFormat
 
 class PlayerViewModel(
     private val track: Track?,
     private val interactor: PlayerInteractor,
+    private val playlistInteractor: PlaylistInteractor,
     private val formatter: SimpleDateFormat
 ) : ViewModel() {
     private val pauseDrawableRes = R.drawable.ic_pause_circle
@@ -35,7 +40,12 @@ class PlayerViewModel(
     val playerScreenState: LiveData<PlayerScreenState> get() = _playerScreenState
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean> = _isFavorite
+    private val playlistListState = MutableLiveData<List<Playlist>>()
+    val action = MutableLiveData<PlayerAction?>()
     private var updateTimeProgressJob: Job? = null
+
+    fun observePlaylistListState(): LiveData<List<Playlist>> = playlistListState
+    fun observeAction(): LiveData<PlayerAction?> = action
 
     init {
         track?.let {
@@ -49,6 +59,7 @@ class PlayerViewModel(
                 }
             }
         }
+        updatePlaylistList()
         preparePlayer(track?.previewUrl ?: "")
     }
 
@@ -85,6 +96,33 @@ class PlayerViewModel(
             play()
         } else if (interactor.currentState == PlayerState.PLAYING) {
             pause()
+        }
+    }
+
+    fun updatePlaylistList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistInteractor.getPlaylistList().collect {
+                Log.v("PlayerViewModel", "size = ${it.size}")
+                playlistListState.postValue(it)
+            }
+        }
+    }
+
+    fun onPlaylistItemClickEvent(playlist: Playlist) {
+        if (track != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                if (playlistInteractor.isTrackInPlaylist(track, playlist)) {
+                    action.postValue(PlayerAction.ShowSnackbar(isTrackAdded = false, playlist.name))
+                    delay(CLEAR_ACTION_TIME_INTERVAL)
+                    action.postValue(null)
+                } else {
+                    playlistInteractor.addTrackToPlaylist(track, playlist)
+                    updatePlaylistList()
+                    action.postValue(PlayerAction.ShowSnackbar(isTrackAdded = true, playlist.name))
+                    delay(CLEAR_ACTION_TIME_INTERVAL)
+                    action.postValue(null)
+                }
+            }
         }
     }
 
@@ -138,5 +176,6 @@ class PlayerViewModel(
 
     companion object {
         private const val UPDATE_TIME_INTERVAL = 300L
+        private const val CLEAR_ACTION_TIME_INTERVAL = 2000L
     }
 }
