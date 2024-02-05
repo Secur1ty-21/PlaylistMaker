@@ -48,4 +48,5 @@
     <string name="create_hint_description">Description</string>
     <string name="create_btn_create">Create</string>
     <string name="create_hint_name">Title*</string>
+    <string name="player_lbl_add_to_playlist">Add to Playlist</string>
 </resources>

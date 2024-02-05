@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.yamost.playlistmaker.R
+import ru.yamost.playlistmaker.core.ui.PlaylistAdapter
 import ru.yamost.playlistmaker.databinding.FragmentPlaylistBinding
 import ru.yamost.playlistmaker.media.ui.MediaFragmentDirections
 import ru.yamost.playlistmaker.playlist.ui.model.PlaylistScreenState
@@ -36,6 +38,9 @@ class PlaylistFragment : Fragment() {
         }
         binding.rvPlaylist.adapter = playlistAdapter
         binding.rvPlaylist.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+        binding.rvPlaylist.addItemDecoration(PlaylistItemDecorator(
+            resources.getDimensionPixelSize(R.dimen.playlist_item_between_space)
+        ))
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }

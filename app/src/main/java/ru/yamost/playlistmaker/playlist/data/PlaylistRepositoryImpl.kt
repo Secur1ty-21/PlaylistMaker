@@ -12,6 +12,7 @@ import ru.yamost.playlistmaker.playlist.data.db.dao.PlaylistDao
 import ru.yamost.playlistmaker.playlist.data.db.entity.PlaylistEntity
 import ru.yamost.playlistmaker.playlist.domain.api.PlaylistRepository
 import ru.yamost.playlistmaker.playlist.domain.model.Playlist
+import ru.yamost.playlistmaker.search.domain.model.Track
 import java.io.File
 import java.util.Date
 
@@ -58,5 +59,9 @@ class PlaylistRepositoryImpl(
 
             newInternalFile.toUri()
         }
+    }
+
+    override fun addTrackToPlaylist(track: Track) {
+
     }
 }

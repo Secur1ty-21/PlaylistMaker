@@ -59,4 +59,5 @@
     <string name="create_hint_description">Описание</string>
     <string name="create_btn_create">Создать</string>
     <string name="create_hint_name">Название*</string>
+    <string name="player_lbl_add_to_playlist">Добавить в плейлист</string>
 </resources>

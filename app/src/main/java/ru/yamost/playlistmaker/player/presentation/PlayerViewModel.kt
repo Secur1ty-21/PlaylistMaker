@@ -1,4 +1,4 @@
-package ru.yamost.playlistmaker.player.ui
+package ru.yamost.playlistmaker.player.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,13 +11,16 @@ import kotlinx.coroutines.launch
 import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.player.domain.api.PlayerInteractor
 import ru.yamost.playlistmaker.player.domain.model.PlayerState
-import ru.yamost.playlistmaker.player.ui.model.PlayerScreenState
+import ru.yamost.playlistmaker.player.presentation.model.PlayerScreenState
+import ru.yamost.playlistmaker.playlist.domain.api.PlaylistInteractor
+import ru.yamost.playlistmaker.playlist.domain.model.Playlist
 import ru.yamost.playlistmaker.search.domain.model.Track
 import java.text.SimpleDateFormat
 
 class PlayerViewModel(
     private val track: Track?,
     private val interactor: PlayerInteractor,
+    private val playlistInteractor: PlaylistInteractor,
     private val formatter: SimpleDateFormat
 ) : ViewModel() {
     private val pauseDrawableRes = R.drawable.ic_pause_circle
@@ -35,7 +38,10 @@ class PlayerViewModel(
     val playerScreenState: LiveData<PlayerScreenState> get() = _playerScreenState
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean> = _isFavorite
+    private val playlistListState = MutableLiveData<List<Playlist>>()
     private var updateTimeProgressJob: Job? = null
+
+    fun observePlaylistListState(): LiveData<List<Playlist>> = playlistListState
 
     init {
         track?.let {
@@ -49,6 +55,7 @@ class PlayerViewModel(
                 }
             }
         }
+        updatePlaylistList()
         preparePlayer(track?.previewUrl ?: "")
     }
 
@@ -85,6 +92,20 @@ class PlayerViewModel(
             play()
         } else if (interactor.currentState == PlayerState.PLAYING) {
             pause()
+        }
+    }
+
+    fun updatePlaylistList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistInteractor.getPlaylistList().collect {
+                playlistListState.postValue(it)
+            }
+        }
+    }
+
+    fun onPlaylistItemClickEvent(playlistId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+
         }
     }
 

@@ -43,5 +43,6 @@
         <item name="playlistMakerBottomNavDividerColor">@color/yp_light_gray</item>
         <item name="playlistMakerEditTextStrokeColor">@color/yp_text_gray</item>
         <item name="playlistMakerSnackbarTint">@color/yp_black</item>
+        <item name="playlistMakerBottomSheetDragViewColor">@color/yp_light_gray</item>
     </style>
 </resources>
