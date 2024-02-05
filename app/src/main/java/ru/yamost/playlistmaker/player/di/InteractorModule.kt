@@ -7,7 +7,8 @@ import ru.yamost.playlistmaker.player.domain.impl.PlayerInteractorImpl
 val playerInteractorModule = module {
     factory<PlayerInteractor> {
         PlayerInteractorImpl(
-            playerController = get()
+            playerController = get(),
+            favoriteTrackRepository = get()
         )
     }
 }

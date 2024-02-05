@@ -3,6 +3,7 @@ package ru.yamost.playlistmaker.search.data
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import ru.yamost.playlistmaker.favorites.domain.api.FavoriteTrackRepository
 import ru.yamost.playlistmaker.search.data.network.dto.TrackSearchRequest
 import ru.yamost.playlistmaker.search.data.network.dto.TrackSearchResponse
 import ru.yamost.playlistmaker.search.domain.api.TrackRepository
@@ -13,6 +14,7 @@ import ru.yamost.playlistmaker.util.Resource
 import java.text.SimpleDateFormat
 
 class TrackRepositoryImpl(
+    private val favoriteTrackRepository: FavoriteTrackRepository,
     private val formatter: SimpleDateFormat,
     private val networkClient: NetworkClient
 ) : TrackRepository {
@@ -22,6 +24,7 @@ class TrackRepositoryImpl(
             val response = networkClient.doSearchTrackRequest(TrackSearchRequest(searchQuery))
             when (response.resultCode) {
                 200 -> {
+                    val favoriteTrackMap = favoriteTrackRepository.getFavoriteIdMap()
                     val trackList = (response as TrackSearchResponse).trackList.map { dto ->
                         Track(
                             id = dto.id,
@@ -33,7 +36,8 @@ class TrackRepositoryImpl(
                             releaseDate = dto.releaseDate ?: "",
                             primaryGenreName = dto.primaryGenreName ?: "",
                             country = dto.country ?: "",
-                            previewUrl = dto.previewUrl ?: ""
+                            previewUrl = dto.previewUrl ?: "",
+                            isFavorite = favoriteTrackMap.contains(dto.id)
                         )
                     }
                     if (trackList.isEmpty()) {

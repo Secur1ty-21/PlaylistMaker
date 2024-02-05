@@ -46,9 +46,19 @@ class PlayerFragment : Fragment() {
         viewModel.trackInfoState.observe(viewLifecycleOwner) {
             renderTrackInfo(it)
         }
+        viewModel.isFavorite.observe(viewLifecycleOwner) { isFavorite ->
+            if (isFavorite) {
+                binding.addToFavoriteButton.setImageResource(R.drawable.ic_favorite_active)
+            } else {
+                binding.addToFavoriteButton.setImageResource(R.drawable.ic_favorite_inactive)
+            }
+        }
         binding.topAppBar.setNavigationOnClickListener { findNavController().navigateUp() }
         binding.playButton.setOnClickListener {
             viewModel.onPlayButton()
+        }
+        binding.addToFavoriteButton.setOnClickListener {
+            viewModel.onClickFavoriteBtn()
         }
     }
 
