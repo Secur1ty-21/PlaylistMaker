@@ -21,7 +21,4 @@
     <attr name="playlistMakerBottomNavInactiveItemColor" format="reference" />
     <attr name="playlistMakerBottomNavBackgroundColor" format="reference" />
     <attr name="playlistMakerBottomNavDividerColor" format="reference" />
-    <attr name="playlistMakerEditTextStrokeColor" format="reference" />
-    <attr name="playlistMakerSnackbarTint" format="reference" />
-    <attr name="playlistMakerBottomSheetDragViewColor" format="reference" />
 </resources>

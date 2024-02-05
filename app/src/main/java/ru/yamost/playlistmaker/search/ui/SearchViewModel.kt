@@ -1,10 +1,10 @@
 package ru.yamost.playlistmaker.search.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,9 +36,11 @@ class SearchViewModel(
         }
     }
 
+
     fun onSearchTextChangedEvent(searchQuery: String) {
         this.searchQuery = searchQuery
         debounceRequest?.cancel()
+        Log.v(SearchFragment::class.java.simpleName, "onSearchTextChangedEvent $searchQuery")
         searchScreenState.value?.let {
             if (it is SearchScreenState.Error && it.searchState == SearchErrorStatus.CANCELED) return
         }
@@ -46,7 +48,7 @@ class SearchViewModel(
             searchQuery.isNotEmpty() -> {
                 if (searchQuery != lastRequestWithReceivedResponse) {
                     searchScreenState.value = SearchScreenState.Default
-                    debounceRequest = viewModelScope.launch(Dispatchers.IO) {
+                    debounceRequest = viewModelScope.launch {
                         delay(SEARCH_DEBOUNCE_DELAY)
                         sentSearchRequest(searchQuery)
                     }
@@ -73,15 +75,17 @@ class SearchViewModel(
     }
 
     fun runPreviousSearchRequest(searchQuery: String) {
-        debounceRequest = viewModelScope.launch(Dispatchers.IO) {
+        debounceRequest = viewModelScope.launch {
             sentSearchRequest(searchQuery, repeatRequest = true)
         }
     }
 
     private suspend fun sentSearchRequest(searchQuery: String, repeatRequest: Boolean = false) {
+        Log.v(SearchFragment::class.java.simpleName, "sentSearchRequest $searchQuery $repeatRequest")
         if (searchQuery != lastRequestWithReceivedResponse || repeatRequest) {
-            searchScreenState.postValue(SearchScreenState.Loading)
+            searchScreenState.value = SearchScreenState.Loading
             searchInteractor.searchTracks(text = searchQuery).collect { result ->
+                Log.v(SearchFragment::class.java.simpleName, "resultViewModel $result")
                 lastRequestWithReceivedResponse = searchQuery
                 when (result) {
                     is Resource.Success -> {
@@ -117,6 +121,7 @@ class SearchViewModel(
     fun onNavigateAction() {
         debounceRequest?.cancel()
         if (debounceRequest?.isCancelled == true) {
+            Log.v(SearchFragment::class.java.simpleName, "onNavigation cancel")
             searchScreenState.value = SearchScreenState.Error(SearchErrorStatus.CANCELED)
         }
     }

@@ -1,17 +1,12 @@
 package ru.yamost.playlistmaker.media.ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
-import com.google.android.material.color.MaterialColors
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import ru.yamost.playlistmaker.R
-import ru.yamost.playlistmaker.create.presentation.ui.CreateFragment
 import ru.yamost.playlistmaker.databinding.FragmentMediaBinding
 
 class MediaFragment : Fragment() {
@@ -29,7 +24,6 @@ class MediaFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("ResourceType")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.topAppBar.setNavigationOnClickListener { requireActivity().finish() }
@@ -41,31 +35,6 @@ class MediaFragment : Fragment() {
             }
         }
         tabMediator.attach()
-        setFragmentResultListener(
-            requestKey = CreateFragment.RESULT_KEY_CREATE_SUCCESS
-        ) { _, bundle ->
-            Snackbar.make(
-                binding.root,
-                getString(
-                    R.string.create_playlist_created_msg,
-                    bundle.getString(CreateFragment.KEY_NAME_CREATED_PLAYLIST)
-                ),
-                Snackbar.LENGTH_SHORT
-            )
-                .setTextColor(
-                    MaterialColors.getColor(
-                        binding.root,
-                        R.attr.playlistMakerButtonTextColor
-                    )
-                )
-                .setBackgroundTint(
-                    MaterialColors.getColor(
-                        binding.root,
-                        R.attr.playlistMakerSnackbarTint
-                    )
-                )
-                .show()
-        }
     }
 
     override fun onDestroyView() {

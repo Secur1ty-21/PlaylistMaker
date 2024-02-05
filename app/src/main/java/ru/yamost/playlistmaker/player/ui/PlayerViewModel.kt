@@ -1,26 +1,22 @@
-package ru.yamost.playlistmaker.player.presentation
+package ru.yamost.playlistmaker.player.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.player.domain.api.PlayerInteractor
 import ru.yamost.playlistmaker.player.domain.model.PlayerState
-import ru.yamost.playlistmaker.player.presentation.model.PlayerScreenState
-import ru.yamost.playlistmaker.playlist.domain.api.PlaylistInteractor
-import ru.yamost.playlistmaker.playlist.domain.model.Playlist
+import ru.yamost.playlistmaker.player.ui.model.PlayerScreenState
 import ru.yamost.playlistmaker.search.domain.model.Track
 import java.text.SimpleDateFormat
 
 class PlayerViewModel(
-    private val track: Track?,
+    track: Track?,
     private val interactor: PlayerInteractor,
-    private val playlistInteractor: PlaylistInteractor,
     private val formatter: SimpleDateFormat
 ) : ViewModel() {
     private val pauseDrawableRes = R.drawable.ic_pause_circle
@@ -36,26 +32,9 @@ class PlayerViewModel(
         PlayerScreenState.PlayedTime(formatter.format(PlayerInteractor.MAX_AVAILABLE_TRACK_DURATION))
     )
     val playerScreenState: LiveData<PlayerScreenState> get() = _playerScreenState
-    private val _isFavorite = MutableLiveData<Boolean>()
-    val isFavorite: LiveData<Boolean> = _isFavorite
-    private val playlistListState = MutableLiveData<List<Playlist>>()
     private var updateTimeProgressJob: Job? = null
 
-    fun observePlaylistListState(): LiveData<List<Playlist>> = playlistListState
-
     init {
-        track?.let {
-            viewModelScope.launch(Dispatchers.IO) {
-                if (it.isFavorite) {
-                    _isFavorite.postValue(true)
-                } else {
-                    interactor.isTrackInFavorite(it).collect {
-                        _isFavorite.postValue(it)
-                    }
-                }
-            }
-        }
-        updatePlaylistList()
         preparePlayer(track?.previewUrl ?: "")
     }
 
@@ -68,7 +47,7 @@ class PlayerViewModel(
                 _playerScreenState.value = PlayerScreenState.PlayButtonState(
                     drawableRes = playDrawableRes,
                     isEnabled = true,
-                    playedTime = formatter.format(PlayerInteractor.MAX_AVAILABLE_TRACK_DURATION),
+                    playedTime = formatter.format(PlayerInteractor.MAX_AVAILABLE_TRACK_DURATION)
                 )
             }
 
@@ -95,20 +74,6 @@ class PlayerViewModel(
         }
     }
 
-    fun updatePlaylistList() {
-        viewModelScope.launch(Dispatchers.IO) {
-            playlistInteractor.getPlaylistList().collect {
-                playlistListState.postValue(it)
-            }
-        }
-    }
-
-    fun onPlaylistItemClickEvent(playlistId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-
-        }
-    }
-
     private fun play() {
         interactor.play()
         _playerScreenState.value = PlayerScreenState.PlayButtonState(
@@ -120,7 +85,7 @@ class PlayerViewModel(
             while (interactor.currentState == PlayerState.PLAYING) {
                 delay(UPDATE_TIME_INTERVAL)
                 _playerScreenState.value = PlayerScreenState.PlayedTime(
-                    playedTime = formatter.format(interactor.playedTime())
+                    playedTime = formatter.format(interactor.playedTime()),
                 )
             }
         }
@@ -135,20 +100,6 @@ class PlayerViewModel(
                 isEnabled = true,
                 playedTime = formatter.format(interactor.playedTime())
             )
-        }
-    }
-
-    fun onClickFavoriteBtn() {
-        track?.let {
-            viewModelScope.launch(Dispatchers.IO) {
-                if (isFavorite.value == true) {
-                    interactor.deleteTrackFromFavorite(it)
-                    _isFavorite.postValue(false)
-                } else {
-                    interactor.addTrackToFavorite(it)
-                    _isFavorite.postValue(true)
-                }
-            }
         }
     }
 

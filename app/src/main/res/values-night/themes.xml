@@ -17,8 +17,6 @@
         <!-- Customize your theme here. -->
         <item name="switchStyle">@style/Widget.App.Switch</item>
         <item name="colorAccent">@color/yp_blue</item>
-        <!-- EditText cursor color -->
-        <item name="colorControlActivated">@color/yp_blue</item>
         <!-- Init attr -->
         <item name="mainScreenBackgroundColor">@color/yp_black</item>
         <item name="colorOnMainButton">@color/yp_black</item>
@@ -41,8 +39,5 @@
         <item name="playlistMakerBottomNavInactiveItemColor">@color/yp_white</item>
         <item name="playlistMakerBottomNavBackgroundColor">@color/yp_black</item>
         <item name="playlistMakerBottomNavDividerColor">@color/yp_white</item>
-        <item name="playlistMakerEditTextStrokeColor">@color/yp_white</item>
-        <item name="playlistMakerSnackbarTint">@color/yp_white</item>
-        <item name="playlistMakerBottomSheetDragViewColor">@color/yp_white</item>
     </style>
 </resources>

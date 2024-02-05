@@ -40,8 +40,7 @@ val searchRepositoryModule = module {
     single<TrackRepository> {
         TrackRepositoryImpl(
             formatter = get { parametersOf(get(DateTimeRepository::class.java)) },
-            networkClient = get(),
-            favoriteTrackRepository = get()
+            networkClient = get()
         )
     }
 }

@@ -6,15 +6,9 @@
     <dimen name="main_margin_between_button">4dp</dimen>
     <!--Activity settings-->
     <dimen name="settings_button_height">61dp</dimen>
-    <!--Playlist-->
-    <dimen name="playlist_item_between_space">8dp</dimen>
-    <dimen name="cover_s">45dp</dimen>
     <!--Common elements-->
-    <dimen name="margin_from_toolbar">24dp</dimen>
     <dimen name="content_padding_top">14dp</dimen>
-    <dimen name="contentPaddingXS">8dp</dimen>
     <dimen name="contentPaddingS">16dp</dimen>
-    <dimen name="contentPaddingM">24dp</dimen>
     <!-- Text -->
     <dimen name="text_XXL">22sp</dimen>
     <dimen name="text_XL">19sp</dimen>
@@ -23,11 +17,11 @@
     <dimen name="text_S">13sp</dimen>
     <dimen name="text_XS">11sp</dimen>
     <!-- \Text -->
-    <dimen name="cornerRadiusXXS">2dp</dimen>
-    <dimen name="cornerRadiusXS">4dp</dimen>
+    <dimen name="margin_from_toolbar">24dp</dimen>
+    <dimen name="cornerRadiusXS">2dp</dimen>
     <dimen name="cornerRadiusS">8dp</dimen>
-    <dimen name="cornerRadiusM">16dp</dimen>
     <dimen name="cornerRadiusXL">54dp</dimen>
+    <dimen name="contentPaddingM">24dp</dimen>
     <dimen name="playerCoverSize">312dp</dimen>
     <dimen name="circular_progress">44dp</dimen>
 </resources>

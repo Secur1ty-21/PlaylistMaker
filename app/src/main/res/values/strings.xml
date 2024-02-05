@@ -30,19 +30,6 @@
     <string name="player_year">Год</string>
     <string name="player_genre_name">Жанр</string>
     <string name="player_country">Страна</string>
-    <string name="create_toolbar_title">Новый плейлист</string>
-    <string name="create_accepted_dialog_title">Завершить создание плейлиста?</string>
-    <string name="create_accepted_dialog_msg">Все несохраненные данные будут потеряны</string>
-    <string name="create_accepted_dialog_pos_btn">Завершить</string>
-    <string name="create_accepted_dialog_neg_btn">Отмена</string>
-    <string name="create_playlist_created_msg">Плейлист %s создан</string>
-    <plurals name="playlist_item_size">
-        <item quantity="zero">нет треков</item>
-        <item quantity="one">%1$d трек</item>
-        <item quantity="two">%1$d трека</item>
-        <item quantity="few">%1$d трека</item>
-        <item quantity="many">%1$d треков</item>
-    </plurals>
     <!--Support assistant-->
     <string name="button_back_description">Назад</string>
     <string name="button_clear_description">Очистить</string>
@@ -56,8 +43,4 @@
     <string name="btn_create_playlist">Новый плейлист</string>
     <string name="media_tab_favorites">Избранные треки</string>
     <string name="media_tab_playlists">Плейлисты</string>
-    <string name="create_hint_description">Описание</string>
-    <string name="create_btn_create">Создать</string>
-    <string name="create_hint_name">Название*</string>
-    <string name="player_lbl_add_to_playlist">Добавить в плейлист</string>
 </resources>
