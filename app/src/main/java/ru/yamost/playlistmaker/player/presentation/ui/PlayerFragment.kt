@@ -104,7 +104,6 @@ class PlayerFragment : Fragment() {
             requestKey = CreateFragment.RESULT_KEY_CREATE_SUCCESS
         ) { _, bundle ->
             viewModel.updatePlaylistList()
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
             showSnackbar(
                 getString(
                     R.string.create_playlist_created_msg,
