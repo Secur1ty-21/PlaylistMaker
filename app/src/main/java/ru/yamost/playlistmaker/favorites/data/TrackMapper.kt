@@ -1,12 +1,12 @@
 package ru.yamost.playlistmaker.favorites.data
 
-import ru.yamost.playlistmaker.favorites.data.db.entity.TrackEntity
+import ru.yamost.playlistmaker.favorites.data.db.entity.FavoriteTrackEntity
 import ru.yamost.playlistmaker.search.domain.model.Track
 
 class TrackMapper {
-    fun mapToEntity(track: Track): TrackEntity {
+    fun mapToEntity(track: Track): FavoriteTrackEntity {
         return with(track) {
-            TrackEntity(
+            FavoriteTrackEntity(
                 id = id,
                 trackName = name,
                 artistName = artist,
@@ -21,8 +21,8 @@ class TrackMapper {
         }
     }
 
-    fun mapToDomain(trackEntity: TrackEntity): Track {
-        return with(trackEntity) {
+    fun mapToDomain(favoriteTrackEntity: FavoriteTrackEntity): Track {
+        return with(favoriteTrackEntity) {
             Track(
                 id = id,
                 name = trackName,

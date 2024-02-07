@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/screenBackgroundColor"
@@ -9,7 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/contentPaddingS">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_create_playlist"
@@ -20,6 +23,15 @@
             android:layout_marginTop="@dimen/margin_from_toolbar"
             android:text="@string/btn_create_playlist" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_playlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/contentPaddingS"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_grid_playlist"
+            tools:spanCount="2" />
+
         <ImageView
             android:id="@+id/img_not_created"
             android:layout_width="wrap_content"
@@ -27,16 +39,28 @@
             android:layout_gravity="center"
             android:layout_marginTop="46dp"
             android:contentDescription="@string/search_not_found"
-            android:src="@drawable/ic_not_found" />
+            android:src="@drawable/ic_not_found"
+            android:visibility="gone" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/lbl_not_created"
             style="@style/PlaylistMakerTextMediumXL"
             android:layout_width="match_parent"
-            android:layout_marginHorizontal="24dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
             android:layout_marginTop="@dimen/contentPaddingS"
             android:text="@string/playlist_not_created"
-            android:textColor="?attr/mediaNotFoundTextColor" />
+            android:textColor="?attr/mediaNotFoundTextColor"
+            android:visibility="gone" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:indicatorColor="@color/yp_blue"
+            tools:visibility="visible" />
     </LinearLayout>
 </ScrollView>

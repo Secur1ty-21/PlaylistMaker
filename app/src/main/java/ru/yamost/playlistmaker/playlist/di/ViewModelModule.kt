@@ -6,6 +6,8 @@ import ru.yamost.playlistmaker.playlist.ui.PlaylistViewModel
 
 val playlistViewModelModule = module {
     viewModel {
-        PlaylistViewModel()
+        PlaylistViewModel(
+            playlistInteractor = get()
+        )
     }
 }

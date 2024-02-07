@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,20 +55,20 @@ class FavoritesFragment : Fragment() {
         when (state) {
             is FavoriteScreenState.Empty -> {
                 binding.progress.hide()
-                binding.emptyBlock.visibility = View.VISIBLE
-                binding.recyclerView.visibility = View.GONE
+                binding.emptyBlock.isVisible = true
+                binding.recyclerView.isVisible = false
             }
 
             is FavoriteScreenState.Loading -> {
                 binding.progress.show()
-                binding.emptyBlock.visibility = View.GONE
-                binding.recyclerView.visibility = View.GONE
+                binding.emptyBlock.isVisible = false
+                binding.recyclerView.isVisible = false
             }
 
             is FavoriteScreenState.Content -> {
                 binding.progress.hide()
-                binding.emptyBlock.visibility = View.GONE
-                binding.recyclerView.visibility = View.VISIBLE
+                binding.emptyBlock.isVisible = false
+                binding.recyclerView.isVisible = true
                 updateRecyclerView(state.trackList)
             }
         }

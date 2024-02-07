@@ -4,7 +4,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.get
 import org.koin.dsl.module
-import ru.yamost.playlistmaker.player.ui.PlayerViewModel
+import ru.yamost.playlistmaker.player.presentation.PlayerViewModel
 import ru.yamost.playlistmaker.search.domain.api.DateTimeRepository
 import ru.yamost.playlistmaker.search.domain.model.Track
 import java.text.SimpleDateFormat
@@ -14,6 +14,7 @@ val playerViewModelModule = module {
         PlayerViewModel(
             track = track,
             interactor = get(),
+            playlistInteractor = get(),
             formatter = get { parametersOf(get(DateTimeRepository::class.java)) }
         )
     }
