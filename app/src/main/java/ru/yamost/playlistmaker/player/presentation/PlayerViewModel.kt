@@ -113,13 +113,13 @@ class PlayerViewModel(
             viewModelScope.launch(Dispatchers.IO) {
                 if (playlistInteractor.isTrackInPlaylist(track, playlist)) {
                     action.postValue(PlayerAction.ShowSnackbar(isTrackAdded = false, playlist.name))
-                    delay(CLEAR_ACTION_TIME_INTERVAL)
+                    delay(CLEAR_ACTION_TIME_INTERVAL_MILLIS)
                     action.postValue(null)
                 } else {
                     playlistInteractor.addTrackToPlaylist(track, playlist)
                     updatePlaylistList()
                     action.postValue(PlayerAction.ShowSnackbar(isTrackAdded = true, playlist.name))
-                    delay(CLEAR_ACTION_TIME_INTERVAL)
+                    delay(CLEAR_ACTION_TIME_INTERVAL_MILLIS)
                     action.postValue(null)
                 }
             }
@@ -135,7 +135,7 @@ class PlayerViewModel(
         )
         updateTimeProgressJob = viewModelScope.launch {
             while (interactor.currentState == PlayerState.PLAYING) {
-                delay(UPDATE_TIME_INTERVAL)
+                delay(UPDATE_TIME_INTERVAL_MILLIS)
                 _playerScreenState.value = PlayerScreenState.PlayedTime(
                     playedTime = formatter.format(interactor.playedTime())
                 )
@@ -175,7 +175,7 @@ class PlayerViewModel(
     }
 
     companion object {
-        private const val UPDATE_TIME_INTERVAL = 300L
-        private const val CLEAR_ACTION_TIME_INTERVAL = 2000L
+        private const val UPDATE_TIME_INTERVAL_MILLIS = 300L
+        private const val CLEAR_ACTION_TIME_INTERVAL_MILLIS = 2000L
     }
 }

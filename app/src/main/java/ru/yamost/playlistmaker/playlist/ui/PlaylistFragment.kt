@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -52,15 +53,15 @@ class PlaylistFragment : Fragment() {
         binding.progress.hide()
         when (state) {
             is PlaylistScreenState.Content -> {
-                binding.imgNotCreated.visibility = View.GONE
-                binding.lblNotCreated.visibility = View.GONE
+                binding.imgNotCreated.isVisible = false
+                binding.lblNotCreated.isVisible = false
                 playlistAdapter.updateContent(state.playlistList)
             }
 
             is PlaylistScreenState.Empty -> {
                 playlistAdapter.updateContent(emptyList())
-                binding.imgNotCreated.visibility = View.VISIBLE
-                binding.lblNotCreated.visibility = View.VISIBLE
+                binding.imgNotCreated.isVisible = true
+                binding.lblNotCreated.isVisible = true
             }
         }
     }

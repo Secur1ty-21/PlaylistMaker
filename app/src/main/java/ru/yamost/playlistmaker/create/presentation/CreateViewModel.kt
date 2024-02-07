@@ -11,8 +11,8 @@ import ru.yamost.playlistmaker.playlist.domain.api.PlaylistInteractor
 class CreateViewModel(private val playlistInteractor: PlaylistInteractor) : ViewModel() {
     var state: CreateState = CreateState()
         private set
-    private var action = MutableLiveData<CreateAction?>()
-    fun observeAction(): LiveData<CreateAction?> = action
+    private var _action = MutableLiveData<CreateAction?>()
+    val action: LiveData<CreateAction?> get() = _action
 
     fun obtainEvent(viewEvent: CreateEvent) {
         when (viewEvent) {
@@ -37,19 +37,19 @@ class CreateViewModel(private val playlistInteractor: PlaylistInteractor) : View
                     )
                 }.invokeOnCompletion {
                     viewModelScope.launch(Dispatchers.Main) {
-                        action.value = CreateAction.NavigateBackWithResult(albumName = state.albumName)
+                        _action.value = CreateAction.NavigateBackWithResult(albumName = state.albumName)
                     }
                 }
             }
 
             is CreateEvent.OnBackRequested -> {
                 if (state.photo != null || state.albumName.isNotEmpty() || state.albumDescription.isNotEmpty()) {
-                    action.value = CreateAction.ShowAcceptedDialog(
-                        onPosBtnClick = { action.value = null },
-                        onCancelBtnClick = { action.value = null }
+                    _action.value = CreateAction.ShowAcceptedDialog(
+                        onPosBtnClick = { _action.value = null },
+                        onCancelBtnClick = { _action.value = null }
                     )
                 } else {
-                    action.value = CreateAction.NavigateBack
+                    _action.value = CreateAction.NavigateBack
                 }
             }
         }

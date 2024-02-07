@@ -2,8 +2,6 @@ package ru.yamost.playlistmaker.create.presentation.ui
 
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +10,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
@@ -29,29 +28,6 @@ import ru.yamost.playlistmaker.databinding.FragmentCreateBinding
 class CreateFragment : Fragment() {
     private var _binding: FragmentCreateBinding? = null
     private val binding get() = _binding!!
-    private val albumNameTextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
-
-        override fun afterTextChanged(p0: Editable?) {
-            binding.btnCreatePlaylist.isEnabled = !p0?.toString().isNullOrEmpty()
-            viewModel.obtainEvent(CreateEvent.OnAlbumNameType(p0.toString()))
-        }
-    }
-    private val albumDescriptionTextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
-
-        override fun afterTextChanged(p0: Editable?) {
-            viewModel.obtainEvent(CreateEvent.OnAlbumDescriptionType(p0.toString()))
-        }
-    }
     private val photoPick = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
         if (it != null) {
             setImageViewWithUri(it)
@@ -71,7 +47,7 @@ class CreateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.observeAction().observe(viewLifecycleOwner) { action ->
+        viewModel.action.observe(viewLifecycleOwner) { action ->
             action?.let {
                 when (it) {
                     is CreateAction.ShowAcceptedDialog -> {
@@ -115,8 +91,13 @@ class CreateFragment : Fragment() {
         binding.btnCreatePlaylist.setOnClickListener {
             viewModel.obtainEvent(CreateEvent.OnBtnCreateClick)
         }
-        binding.editAlbumName.addTextChangedListener(albumNameTextWatcher)
-        binding.editAlbumDescription.addTextChangedListener(albumDescriptionTextWatcher)
+        binding.editAlbumName.doOnTextChanged { text, _, _, _ ->
+            binding.btnCreatePlaylist.isEnabled = !text.isNullOrEmpty()
+            viewModel.obtainEvent(CreateEvent.OnAlbumNameType(text?.toString() ?: ""))
+        }
+        binding.editAlbumDescription.doOnTextChanged { text, _, _, _ ->
+            viewModel.obtainEvent(CreateEvent.OnAlbumDescriptionType(text?.toString() ?: ""))
+        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.obtainEvent(CreateEvent.OnBackRequested)
         }
@@ -137,8 +118,6 @@ class CreateFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.editAlbumName.removeTextChangedListener(albumNameTextWatcher)
-        binding.editAlbumDescription.removeTextChangedListener(albumDescriptionTextWatcher)
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
     }
 
