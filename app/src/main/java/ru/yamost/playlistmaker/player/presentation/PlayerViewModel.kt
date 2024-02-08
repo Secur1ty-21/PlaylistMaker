@@ -1,6 +1,5 @@
 package ru.yamost.playlistmaker.player.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -102,7 +101,6 @@ class PlayerViewModel(
     fun updatePlaylistList() {
         viewModelScope.launch(Dispatchers.IO) {
             playlistInteractor.getPlaylistList().collect {
-                Log.v("PlayerViewModel", "size = ${it.size}")
                 playlistListState.postValue(it)
             }
         }

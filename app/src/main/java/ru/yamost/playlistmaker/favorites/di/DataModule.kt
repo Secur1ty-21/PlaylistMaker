@@ -7,7 +7,7 @@ import ru.yamost.playlistmaker.core.data.db.AppDatabase
 
 val favoriteDataModule = module {
     single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "favorite.db")
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
             .build()
     }
 }

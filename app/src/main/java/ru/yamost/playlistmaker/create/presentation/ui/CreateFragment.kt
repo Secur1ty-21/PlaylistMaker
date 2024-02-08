@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,11 +15,9 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.create.presentation.CreateAction
 import ru.yamost.playlistmaker.create.presentation.CreateEvent
@@ -34,7 +33,13 @@ class CreateFragment : Fragment() {
             viewModel.obtainEvent(CreateEvent.OnPhotoCaptured(it))
         }
     }
-    private val viewModel by viewModel<CreateViewModel>()
+    private var playlistId: Int? = null
+    private val viewModel by viewModel<CreateViewModel> { parametersOf(playlistId!!) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let { playlistId = CreateFragmentArgs.fromBundle(it).playlistId }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +52,10 @@ class CreateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (playlistId != null && playlistId != -1) {
+            binding.topAppBar.title = getString(R.string.create_update_playlist_toolbar_title)
+            binding.btnCreatePlaylist.text = getString(R.string.create_btn_update)
+        }
         viewModel.action.observe(viewLifecycleOwner) { action ->
             action?.let {
                 when (it) {
@@ -75,6 +84,14 @@ class CreateFragment : Fragment() {
                             )
                         )
                         findNavController().navigateUp()
+                    }
+
+                    is CreateAction.SetUiWithPlaylist -> {
+                        it.playlist.imageUri?.let { uri ->
+                            setImageViewWithUri(uri)
+                        }
+                        binding.editAlbumName.setText(it.playlist.name)
+                        binding.editAlbumDescription.setText(it.playlist.description)
                     }
                 }
             }
@@ -106,14 +123,8 @@ class CreateFragment : Fragment() {
 
     private fun setImageViewWithUri(uri: Uri?) {
         binding.cover.background = null
-        Glide.with(binding.cover)
-            .load(uri)
-            .placeholder(R.drawable.ic_add_photo)
-            .transform(
-                CenterCrop(),
-                RoundedCorners(resources.getDimensionPixelSize(R.dimen.cornerRadiusS))
-            )
-            .into(binding.cover)
+        binding.cover.scaleType = ImageView.ScaleType.CENTER_CROP
+        binding.cover.setImageURI(uri)
     }
 
     override fun onDestroyView() {

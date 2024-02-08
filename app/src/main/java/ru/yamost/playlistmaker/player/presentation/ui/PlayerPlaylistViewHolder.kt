@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.yamost.playlistmaker.R
 import ru.yamost.playlistmaker.playlist.domain.model.Playlist
 
-class PlayerPlaylistViewHolder(parent: View) : RecyclerView.ViewHolder(parent) {
+class PlayerPlaylistViewHolder(parent: View, private val onItemClick: (Playlist) -> Unit) :
+    RecyclerView.ViewHolder(parent) {
     private val cover = itemView.findViewById<ImageView>(R.id.playlist_cover)
     private val lblAlbumName = itemView.findViewById<TextView>(R.id.lbl_playlist_name)
     private val lblAlbumSize = itemView.findViewById<TextView>(R.id.lbl_playlist_size)
 
     fun bind(playlist: Playlist) {
+        itemView.setOnClickListener { onItemClick(playlist) }
         lblAlbumName.text = playlist.name
         lblAlbumSize.text = itemView.context.resources.getQuantityString(
             R.plurals.playlist_item_size,

@@ -32,12 +32,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/cover"
                 android:layout_width="@dimen/playerCoverSize"
                 android:layout_height="@dimen/playerCoverSize"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="24dp"
+                app:shapeAppearance="@style/RoundedCoverM"
                 android:layout_marginTop="26dp"
                 android:background="@drawable/shape_add_cover"
                 android:importantForAccessibility="no"

@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.color.MaterialColors
-import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.yamost.playlistmaker.R
@@ -24,6 +22,7 @@ import ru.yamost.playlistmaker.player.presentation.PlayerViewModel
 import ru.yamost.playlistmaker.player.presentation.model.PlayerAction
 import ru.yamost.playlistmaker.player.presentation.model.PlayerScreenState
 import ru.yamost.playlistmaker.search.domain.model.Track
+import ru.yamost.playlistmaker.util.Snackbar
 
 class PlayerFragment : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
@@ -166,15 +165,7 @@ class PlayerFragment : Fragment() {
     }
 
     private fun showSnackbar(text: String) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT).setTextColor(
-            MaterialColors.getColor(
-                binding.root, R.attr.playlistMakerButtonTextColor
-            )
-        ).setBackgroundTint(
-            MaterialColors.getColor(
-                binding.root, R.attr.playlistMakerSnackbarTint
-            )
-        ).show()
+        Snackbar.show(binding.root, text)
     }
 
     override fun onPause() {

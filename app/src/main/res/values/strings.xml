@@ -43,7 +43,13 @@
         <item quantity="few">%1$d трека</item>
         <item quantity="many">%1$d треков</item>
     </plurals>
-    <!--Support assistant-->
+    <plurals name="playlist_duration_minute">
+        <item quantity="zero">минут</item>
+        <item quantity="one">%1$d минута</item>
+        <item quantity="two">%1$d минуты</item>
+        <item quantity="few">%1$d минуты</item>
+        <item quantity="many">%1$d минут</item>
+    </plurals>
     <string name="button_back_description">Назад</string>
     <string name="button_clear_description">Очистить</string>
     <string name="image_cover_track_description">Обложка трека</string>
@@ -62,4 +68,22 @@
     <string name="player_lbl_add_to_playlist">Добавить в плейлист</string>
     <string name="player_msg_track_exist_in_playlist">Трек уже добавлен в плейлист %s</string>
     <string name="player_msg_track_added">Добавлено в плейлист %s</string>
+    <string name="playlist_detail_info" translatable="false">%s · %s</string>
+    <string name="playlist_detail_btn_share_description">Поделиться плейлистом</string>
+    <string name="playlist_detail_btn_more_description">Показать дополнительные опции</string>
+    <string name="playlist_detail_dlg_btn_delelte">Удалить</string>
+    <string name="playlist_detail_dlg_btn_cancel">Отмена</string>
+    <string name="playlist_detail_dlg_title">Удалить трек</string>
+    <string name="playlist_detail_dlg_message">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="share_playlist_template" translatable="false">%d.%s - %s(%s)</string>
+    <string name="playlist_detail_btn_share">Поделиться</string>
+    <string name="playlist_detail_btn_edit">Редактировать информацию</string>
+    <string name="playlist_detail_btn_delete">Удалить плейлист</string>
+    <string name="playlist_detail_message_empty_playlist">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="playlist_detail_dlg_delete_playlist_title">Удалить плейлист</string>
+    <string name="playlist_detail_dlg_delete_playlist_message">Хотите удалить плейлист «%s»?</string>
+    <string name="playlist_detail_dlg_delete_playlist_pos_btn">Да</string>
+    <string name="playlist_detail_dlg_delete_playlist_cancel_btn">Нет</string>
+    <string name="create_update_playlist_toolbar_title">Редактировать</string>
+    <string name="create_btn_update">Сохранить</string>
 </resources>
