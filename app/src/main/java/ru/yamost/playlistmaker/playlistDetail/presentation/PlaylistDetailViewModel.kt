@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.yamost.playlistmaker.playlist.domain.api.PlaylistInteractor
 import ru.yamost.playlistmaker.playlist.domain.model.PlaylistWithTracks
