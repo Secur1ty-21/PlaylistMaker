@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.playerFragment, R.id.createFragment -> binding.bottomNavigation.isVisible = false
+                R.id.playerFragment, R.id.createFragment, R.id.playlistDetailFragment -> binding.bottomNavigation.isVisible = false
                 else -> binding.bottomNavigation.isVisible = true
             }
         }

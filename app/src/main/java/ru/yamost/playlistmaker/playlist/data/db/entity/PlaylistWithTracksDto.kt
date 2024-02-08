@@ -4,16 +4,16 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 
-data class PlaylistWithTracks(
+data class PlaylistWithTracksDto(
     @Embedded val playlist: PlaylistEntity,
     @Relation(
         entity = TrackEntity::class,
-        parentColumn = "id",
-        entityColumn = "id_track",
+        parentColumn = "playlist_id",
+        entityColumn = "track_id",
         associateBy = Junction(
             value = PlaylistTrackEntity::class,
-            parentColumn = "playlist_id",
-            entityColumn = "track_id"
+            parentColumn = "p_id",
+            entityColumn = "t_id"
         )
     )
     val tracks: List<TrackEntity>

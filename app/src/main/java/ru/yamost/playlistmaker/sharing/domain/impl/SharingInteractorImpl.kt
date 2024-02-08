@@ -1,5 +1,6 @@
 package ru.yamost.playlistmaker.sharing.domain.impl
 
+import ru.yamost.playlistmaker.playlist.domain.model.PlaylistWithTracks
 import ru.yamost.playlistmaker.sharing.domain.api.ExternalNavigator
 import ru.yamost.playlistmaker.sharing.domain.api.SharingInteractor
 import ru.yamost.playlistmaker.sharing.domain.api.SharingStringResRepository
@@ -31,5 +32,9 @@ class SharingInteractorImpl(
 
     private fun getTermsLink(): String {
         return stringResRepository.termsLink
+    }
+
+    override fun sharePlaylist(playlistWithTracks: PlaylistWithTracks) {
+        externalNavigator.sharePlaylist(stringResRepository.getPlaylistStringForShare(playlistWithTracks))
     }
 }

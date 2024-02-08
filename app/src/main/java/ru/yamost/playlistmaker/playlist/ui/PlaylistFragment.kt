@@ -19,7 +19,10 @@ class PlaylistFragment : Fragment() {
     private val viewModel by viewModel<PlaylistViewModel>()
     private var _binding: FragmentPlaylistBinding? = null
     private val binding: FragmentPlaylistBinding get() = _binding!!
-    private val playlistAdapter = PlaylistAdapter()
+    private val playlistAdapter = PlaylistAdapter {
+        val action = MediaFragmentDirections.actionMediaFragmentToPlaylistDetailFragment(it.id)
+        findNavController().navigate(action)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

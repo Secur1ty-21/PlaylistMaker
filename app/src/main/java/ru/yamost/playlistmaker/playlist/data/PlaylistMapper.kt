@@ -11,7 +11,8 @@ class PlaylistMapper {
             imageUri = uri,
             name = playlistEntity.name,
             size = playlistEntity.size,
-            id = playlistEntity.id
+            id = playlistEntity.playlistId,
+            description = playlistEntity.description
         )
     }
 }

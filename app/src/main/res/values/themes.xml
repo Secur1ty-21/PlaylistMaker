@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/yp_black</item>
         <!-- Yet another colors -->
         <item name="colorSurface">@color/yp_light_gray</item>
-        <item name="colorOnSurface">@color/yp_text_gray</item>
+        <!--<item name="colorOnSurface">@color/yp_text_gray</item>-->
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/yp_blue</item>
         <!-- Customize your theme here. -->

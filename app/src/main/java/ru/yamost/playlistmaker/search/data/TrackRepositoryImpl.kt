@@ -1,6 +1,5 @@
 package ru.yamost.playlistmaker.search.data
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.yamost.playlistmaker.favorites.domain.api.FavoriteTrackRepository
@@ -9,7 +8,6 @@ import ru.yamost.playlistmaker.search.data.network.dto.TrackSearchResponse
 import ru.yamost.playlistmaker.search.domain.api.TrackRepository
 import ru.yamost.playlistmaker.search.domain.model.SearchErrorStatus
 import ru.yamost.playlistmaker.search.domain.model.Track
-import ru.yamost.playlistmaker.search.ui.SearchFragment
 import ru.yamost.playlistmaker.util.Resource
 import java.text.SimpleDateFormat
 
@@ -48,7 +46,6 @@ class TrackRepositoryImpl(
                 }
 
                 NetworkClient.CANCEL_REQUEST_CODE -> {
-                    Log.v(SearchFragment::class.java.simpleName, "emit cancel")
                     emit(Resource.Error(SearchErrorStatus.CANCELED))
                 }
 

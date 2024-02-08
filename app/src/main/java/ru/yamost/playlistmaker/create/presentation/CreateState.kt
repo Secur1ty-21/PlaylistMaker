@@ -6,4 +6,5 @@ data class CreateState(
     val albumName: String = "",
     val albumDescription: String = "",
     val photo: Uri? = null,
+    val size: Int? = null
 )

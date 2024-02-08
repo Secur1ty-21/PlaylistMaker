@@ -17,7 +17,7 @@
         <item name="iconPadding">@dimen/main_button_icon_padding</item>
     </style>
 
-    <style name="SettingActivityButton" parent="Widget.AppCompat.Button.Borderless">
+    <style name="PlaylistMakerTextButton" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/settings_button_height</item>
         <item name="android:backgroundTint">?attr/screenBackgroundColor</item>
@@ -132,8 +132,20 @@
         <item name="android:textColor">?attr/primaryTextColor</item>
     </style>
 
+    <style name="PlaylistMakerTextBoldM">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textColor">?attr/primaryTextColor</item>
+    </style>
+
     <style name="RoundedCoverS" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/cornerRadiusXXS</item>
+    </style>
+
+    <style name="RoundedCoverM" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/cornerRadiusS</item>
     </style>
 </resources>

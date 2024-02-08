@@ -6,15 +6,16 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 @Entity(tableName = "playlist_table")
-data class PlaylistEntity(
+open class PlaylistEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @ColumnInfo("playlist_id")
+    val playlistId: Int = 0,
     @ColumnInfo(name = "created_date")
     val createdDate: Long = Date().time,
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "description")
-    val description: String?,
+    val description: String,
     @ColumnInfo(name = "photo_uri")
     val photoUri: String?,
     @ColumnInfo(name = "size")

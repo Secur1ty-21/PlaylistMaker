@@ -8,8 +8,8 @@ import java.util.Date
 @Entity(tableName = "track_table")
 data class TrackEntity(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "id_track")
-    val idTrack: Int,
+    @ColumnInfo(name = "track_id")
+    val trackId: Int,
     val trackName: String,
     val artistName: String,
     val trackTime: String,

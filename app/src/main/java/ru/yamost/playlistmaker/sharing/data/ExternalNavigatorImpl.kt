@@ -38,6 +38,13 @@ class ExternalNavigatorImpl(
         }
     }
 
+    override fun sharePlaylist(playlistText: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, playlistText)
+        startImplicitIntent(intent)
+    }
+
     private fun isIntentSafe(intent: Intent): Boolean {
         val activities = context.packageManager.queryIntentActivities(intent, 0)
         return activities.size > 0

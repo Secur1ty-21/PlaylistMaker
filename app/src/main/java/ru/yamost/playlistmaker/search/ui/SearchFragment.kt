@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +50,6 @@ class SearchFragment : Fragment() {
             isTrackItemClickAllowed = it
         }
         viewModel.getSearchScreenState().observe(viewLifecycleOwner) {
-            Log.v(SearchFragment::class.java.simpleName, "state = $it")
             render(it)
         }
     }
@@ -103,12 +101,10 @@ class SearchFragment : Fragment() {
             }
 
             is SearchScreenState.Content -> {
-                Log.v(SearchFragment::class.java.simpleName, "content")
                 updateTrackList(state.trackList)
             }
 
             is SearchScreenState.Error -> {
-                Log.v(SearchFragment::class.java.simpleName, "error")
                 showError(state.searchState)
             }
 

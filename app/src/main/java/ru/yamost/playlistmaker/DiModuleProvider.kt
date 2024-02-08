@@ -11,6 +11,7 @@ import ru.yamost.playlistmaker.player.di.playerViewModelModule
 import ru.yamost.playlistmaker.playlist.di.playlistInteractorModule
 import ru.yamost.playlistmaker.playlist.di.playlistRepositoryModule
 import ru.yamost.playlistmaker.playlist.di.playlistViewModelModule
+import ru.yamost.playlistmaker.playlistDetail.di.playlistDetailViewModelModule
 import ru.yamost.playlistmaker.search.di.searchDataModule
 import ru.yamost.playlistmaker.search.di.searchInteractorModule
 import ru.yamost.playlistmaker.search.di.searchRepositoryModule
@@ -57,5 +58,8 @@ object DiModuleProvider {
     )
     val createModules = listOf(
         createViewModelModule
+    )
+    val playlistDetailModules = listOf(
+        playlistDetailViewModelModule
     )
 }

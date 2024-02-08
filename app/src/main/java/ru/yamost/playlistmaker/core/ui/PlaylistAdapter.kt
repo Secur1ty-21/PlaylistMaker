@@ -10,8 +10,7 @@ import ru.yamost.playlistmaker.playlist.domain.model.Playlist
 import ru.yamost.playlistmaker.playlist.ui.PlaylistViewHolder
 
 class PlaylistAdapter(
-    private val isLinearType: Boolean = false,
-    private val clickListener: PlaylistClickListener? = null
+    private val isLinearType: Boolean = false, private val onItemClick: (Playlist) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val playlistList = mutableListOf<Playlist>()
 
@@ -26,17 +25,15 @@ class PlaylistAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutId =
             if (isLinearType) R.layout.item_linear_playlist else R.layout.item_grid_playlist
-        val view = LayoutInflater.from(parent.context)
-            .inflate(layoutId, parent, false)
-        return if (isLinearType) PlayerPlaylistViewHolder(view) else PlaylistViewHolder(view)
+        val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
+        return if (isLinearType) {
+            PlayerPlaylistViewHolder(view, onItemClick)
+        } else {
+            PlaylistViewHolder(view, onItemClick)
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        clickListener?.let {
-            holder.itemView.setOnClickListener { _ ->
-                it.onItemClick(playlist = playlistList[position])
-            }
-        }
         when (holder) {
             is PlaylistViewHolder -> {
                 holder.bind(playlist = playlistList[position])
@@ -49,8 +46,4 @@ class PlaylistAdapter(
     }
 
     override fun getItemCount() = playlistList.size
-}
-
-fun interface PlaylistClickListener {
-    fun onItemClick(playlist: Playlist)
 }

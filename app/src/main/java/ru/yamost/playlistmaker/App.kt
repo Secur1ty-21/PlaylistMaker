@@ -24,6 +24,7 @@ class App : Application() {
             modules(DiModuleProvider.favoritesModules)
             modules(DiModuleProvider.playlistModules)
             modules(DiModuleProvider.createModules)
+            modules(DiModuleProvider.playlistDetailModules)
         }
         val isDarkTheme = themeController.isSystemInDarkMode(
             resources.configuration.uiMode

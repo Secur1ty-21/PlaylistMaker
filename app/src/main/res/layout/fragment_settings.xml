@@ -26,7 +26,7 @@
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switchTheme"
-            style="@style/SettingActivityButton"
+            style="@style/PlaylistMakerTextButton"
             android:layout_marginTop="@dimen/margin_from_toolbar"
             android:paddingHorizontal="@dimen/contentPaddingS"
             android:text="@string/settings_button_theme"
@@ -34,19 +34,19 @@
 
         <Button
             android:id="@+id/button_sharing"
-            style="@style/SettingActivityButton"
+            style="@style/PlaylistMakerTextButton"
             android:text="@string/settings_button_share"
             app:icon="@drawable/ic_share" />
 
         <Button
             android:id="@+id/button_support"
-            style="@style/SettingActivityButton"
+            style="@style/PlaylistMakerTextButton"
             android:text="@string/settings_button_support"
             app:icon="@drawable/ic_support" />
 
         <Button
             android:id="@+id/button_agreement"
-            style="@style/SettingActivityButton"
+            style="@style/PlaylistMakerTextButton"
             android:text="@string/settings_button_agreement"
             app:icon="@drawable/ic_arrow_forward" />
     </LinearLayout>

@@ -6,7 +6,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.get
 import org.koin.dsl.module
-import ru.yamost.playlistmaker.search.data.DateTimeRepositoryImpl
+import ru.yamost.playlistmaker.search.data.TrackDateTimeRepositoryImpl
 import ru.yamost.playlistmaker.search.data.TrackRepositoryImpl
 import ru.yamost.playlistmaker.search.data.SharedPrefSearchHistoryRepository
 import ru.yamost.playlistmaker.search.data.mapper.TrackStorageMapper
@@ -19,7 +19,7 @@ import ru.yamost.playlistmaker.util.Mapper
 
 val searchRepositoryModule = module {
     single<DateTimeRepository> {
-        DateTimeRepositoryImpl()
+        TrackDateTimeRepositoryImpl()
     }
     single<SearchHistoryRepository> {
         SharedPrefSearchHistoryRepository(

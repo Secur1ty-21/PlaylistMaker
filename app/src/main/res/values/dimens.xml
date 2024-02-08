@@ -10,6 +10,7 @@
     <dimen name="playlist_item_between_space">8dp</dimen>
     <dimen name="cover_s">45dp</dimen>
     <!--Common elements-->
+    <dimen name="bottom_sheet_tracks_peek_height">200dp</dimen>
     <dimen name="margin_from_toolbar">24dp</dimen>
     <dimen name="content_padding_top">14dp</dimen>
     <dimen name="contentPaddingXS">8dp</dimen>

@@ -102,7 +102,6 @@ class PlayerViewModel(
     fun updatePlaylistList() {
         viewModelScope.launch(Dispatchers.IO) {
             playlistInteractor.getPlaylistList().collect {
-                Log.v("PlayerViewModel", "size = ${it.size}")
                 playlistListState.postValue(it)
             }
         }
